@@ -11,9 +11,13 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
 
-app.get('/', async (req, res) => {
+app.get('/', (req, res) => {
+  res.render('index');
+});
+
+app.get('/game', async (req, res) => {
   const player = await Player.findOne({ where: { name: 'Shappy' } });
-  res.render('index', { player });
+  res.render('game', { player });
 });
 
 sequelize.sync({ force: true }).then(async () => {

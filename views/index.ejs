@@ -1,16 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Player Attributes</title>
-</head>
-<body>
-  <h1>Player Attributes</h1>
-  <p><strong>Name:</strong> <%= player.name %></p>
-  <p><strong>HP:</strong> <%= player.hp %></p>
-  <p><strong>Attack Level:</strong> <%= player.attackLevel %></p>
-  <p><strong>Strength Level:</strong> <%= player.strengthLevel %></p>
-  <p><strong>Defence Level:</strong> <%= player.defenceLevel %></p>
-</body>
-</html>
+<%- include('partials/header.ejs'); %>
+
+<div class="container">
+    <h1>OSRS Card Game</h1>
+    <a href="/game" class="start-button">Start Game</a>
+</div>
+
+<%- include('partials/footer.ejs'); %>
