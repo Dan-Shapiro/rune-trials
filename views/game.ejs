@@ -1,26 +1,65 @@
 <%- include('partials/header.ejs'); %>
 
-<div class="player-attributes">
-  <div class="attribute">
+<div class="player-stats-row">
+  <div class="player-stat">
     <span><%= player.name %></span>
   </div>
-  <div class="attribute">
-      <img src="/icons/hp.png" alt="HP Icon">
+  <div class="player-stat">
+      <img src="/icons/main/hp.png" alt="HP Icon">
       <span><%= player.hp %></span>
   </div>
-  <div class="attribute">
-      <img src="/icons/atk.png" alt="Attack Icon">
+  <div class="player-stat">
+      <img src="/icons/main/atk.png" alt="Attack Icon">
       <span><%= player.attackLevel %></span>
   </div>
-  <div class="attribute">
-      <img src="/icons/str.png" alt="Strength Icon">
+  <div class="player-stat">
+      <img src="/icons/main/str.png" alt="Strength Icon">
       <span><%= player.strengthLevel %></span>
   </div>
-  <div class="attribute">
-      <img src="/icons/def.png" alt="Defence Icon">
+  <div class="player-stat">
+      <img src="/icons/main/def.png" alt="Defence Icon">
       <span><%= player.defenceLevel %></span>
   </div>
 </div>
+
+<hr>
+
+<% if (weapon) { %>
+<div class="weapon-stats-row">
+  <div class="weapon-stat">
+    <img src="/icons/weapons/<%= weapon.icon %>" alt="<%= weapon.name %>">
+    <span><%= weapon.name %></span>
+  </div>
+  <div class="weapon-stat">
+    <img src="/icons/main/stab.png" alt="Stab Attack Bonus">
+    <span><%= weapon.stabAttack >= 0 ? '+' : ''%><%= weapon.stabAttack %></span>
+  </div>
+  <div class="weapon-stat">
+    <img src="/icons/main/slash.png" alt="Slash Attack Bonus">
+    <span><%= weapon.slashAttack >= 0 ? '+' : ''%><%= weapon.slashAttack %></span>
+  </div>
+  <div class="weapon-stat">
+    <img src="/icons/main/crush.png" alt="Crush Attack Bonus">
+    <span><%= weapon.crushAttack >= 0 ? '+' : ''%><%= weapon.crushAttack %></span>
+  </div>
+  <div class="weapon-stat">
+    <img src="/icons/main/stab.png" alt="Stab Defence Bonus">
+    <span><%= weapon.stabDefence >= 0 ? '+' : ''%><%= weapon.stabDefence %></span>
+  </div>
+  <div class="weapon-stat">
+    <img src="/icons/main/slash.png" alt="Slash Defence Bonus">
+    <span><%= weapon.slashDefence >= 0 ? '+' : ''%><%= weapon.slashDefence %></span>
+  </div>
+  <div class="weapon-stat">
+    <img src="/icons/main/crush.png" alt="Crush Defence Bonus">
+    <span><%= weapon.crushDefence >= 0 ? '+' : ''%><%= weapon.crushDefence %></span>
+  </div>
+  <div class="weapon-stat">
+    <img src="/icons/main/str.png" alt="Strength Bonus">
+    <span><%= weapon.strengthBonus >= 0 ? '+' : ''%><%= weapon.strengthBonus %></span>
+  </div>
+</div>
+<% } %>
 
 <div class="game-area">
   <!-- Game content goes here -->
