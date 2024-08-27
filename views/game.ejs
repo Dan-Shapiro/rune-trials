@@ -1,104 +1,92 @@
 <%- include('partials/header.ejs'); %>
 
-<div class="player-stats-row">
-  <div class="player-stat">
-    <span><%= player.name %></span>
+<div class="stats-banner">
+  <div class="stat-group player-info-group">
+    <div class="group-header">
+      <span><%= player.name %></span>
+    </div>
+    <div class="stat-row">
+      <div class="stat-item">
+        <img src="/icons/main/hp.png" alt="Hitpoints">
+        <span><%= player.hp %></span>
+      </div>
+      <div class="stat-item">
+        <img src="/icons/main/speed.png" alt="Attack Speed">
+        <span><%= weapon.speed %></span>
+      </div>
+      <div class="stat-item">
+        <img src="/icons/main/hitsplat.png" alt="Max Hit">
+        <span><%= maxHit %></span>
+      </div>
+    </div>
   </div>
-  <div class="player-stat">
-      <img src="/icons/main/hp.png" alt="HP Icon">
-      <span><%= player.hp %></span>
+
+  <div class="stat-group player-info-group">
+    <div class="group-header">
+        <img src="/icons/weapons/<%= weapon.icon %>" alt="<%= weapon.name %>">
+        <span><%= weapon.name %></span>
+    </div>
+    <div class="group-header" style="margin-bottom: 0;">
+      <img src="/icons/shields/<%= shield.icon %>" alt="<%= shield.name %>">
+      <span><%= shield.name %></span>
+    </div>
   </div>
-  <div class="player-stat">
-      <img src="/icons/main/atk.png" alt="Attack Icon">
+
+  <div class="stat-group attack-group">
+    <div class="group-header">
+      <img src="/icons/main/atk.png" alt="Attack Level">
       <span><%= player.attackLevel %></span>
+    </div>
+    <div class="stat-row">
+      <div class="stat-item">
+        <img src="/icons/main/stab.png" alt="Stab Attack Bonus">
+        <span><%= weapon.stabAttack + shield.stabAttack >= 0 ? '+' : '' %><%= weapon.stabAttack + shield.stabAttack %></span>
+      </div>
+      <div class="stat-item">
+        <img src="/icons/main/slash.png" alt="Slash Attack Bonus">
+        <span><%= weapon.slashAttack + shield.slashAttack >= 0 ? '+' : '' %><%= weapon.slashAttack + shield.slashAttack %></span>
+      </div>
+      <div class="stat-item">
+        <img src="/icons/main/crush.png" alt="Crush Attack Bonus">
+        <span><%= weapon.crushAttack + shield.crushAttack >= 0 ? '+' : '' %><%= weapon.crushAttack + shield.crushAttack %></span>
+      </div>
+    </div>
   </div>
-  <div class="player-stat">
-      <img src="/icons/main/str.png" alt="Strength Icon">
-      <span><%= player.strengthLevel %></span>
-  </div>
-  <div class="player-stat">
-      <img src="/icons/main/def.png" alt="Defence Icon">
+
+  <div class="stat-group defence-group">
+    <div class="group-header">
+      <img src="/icons/main/def.png" alt="Defence Level">
       <span><%= player.defenceLevel %></span>
+    </div>
+    <div class="stat-row">
+      <div class="stat-item">
+        <img src="/icons/main/stab.png" alt="Stab Defence Bonus">
+        <span><%= weapon.stabDefence + shield.stabDefence >= 0 ? '+' : '' %><%= weapon.stabDefence + shield.stabDefence %></span>
+      </div>
+      <div class="stat-item">
+        <img src="/icons/main/slash.png" alt="Slash Defence Bonus">
+        <span><%= weapon.slashDefence + shield.slashDefence >= 0 ? '+' : '' %><%= weapon.slashDefence + shield.slashDefence %></span>
+      </div>
+      <div class="stat-item">
+        <img src="/icons/main/crush.png" alt="Crush Defence Bonus">
+        <span><%= weapon.crushDefence + shield.crushDefence >= 0 ? '+' : '' %><%= weapon.crushDefence + shield.crushDefence %></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="stat-group strength-group">
+    <div class="group-header">
+      <img src="/icons/main/str.png" alt="Strength Level">
+      <span><%= player.strengthLevel %></span>
+    </div>
+    <div class="stat-row">
+      <div class="stat-item">
+        <img src="/icons/main/str.png" alt="Strength Bonus">
+        <span><%= weapon.strengthBonus + shield.strengthBonus >= 0 ? '+' : '' %><%= weapon.strengthBonus + shield.strengthBonus %></span>
+      </div>
+    </div>
   </div>
 </div>
-
-<hr>
-
-<% if (weapon) { %>
-<div class="weapon-stats-row">
-  <div class="weapon-stat">
-    <img src="/icons/weapons/<%= weapon.icon %>" alt="<%= weapon.name %>">
-    <span><%= weapon.name %> (<%= weapon.speed %>)</span>
-  </div>
-  <div class="weapon-stat">
-    <img src="/icons/main/stab.png" alt="Stab Attack Bonus">
-    <span><%= weapon.stabAttack >= 0 ? '+' : ''%><%= weapon.stabAttack %></span>
-  </div>
-  <div class="weapon-stat">
-    <img src="/icons/main/slash.png" alt="Slash Attack Bonus">
-    <span><%= weapon.slashAttack >= 0 ? '+' : ''%><%= weapon.slashAttack %></span>
-  </div>
-  <div class="weapon-stat">
-    <img src="/icons/main/crush.png" alt="Crush Attack Bonus">
-    <span><%= weapon.crushAttack >= 0 ? '+' : ''%><%= weapon.crushAttack %></span>
-  </div>
-  <div class="weapon-stat">
-    <img src="/icons/main/stab.png" alt="Stab Defence Bonus">
-    <span><%= weapon.stabDefence >= 0 ? '+' : ''%><%= weapon.stabDefence %></span>
-  </div>
-  <div class="weapon-stat">
-    <img src="/icons/main/slash.png" alt="Slash Defence Bonus">
-    <span><%= weapon.slashDefence >= 0 ? '+' : ''%><%= weapon.slashDefence %></span>
-  </div>
-  <div class="weapon-stat">
-    <img src="/icons/main/crush.png" alt="Crush Defence Bonus">
-    <span><%= weapon.crushDefence >= 0 ? '+' : ''%><%= weapon.crushDefence %></span>
-  </div>
-  <div class="weapon-stat">
-    <img src="/icons/main/str.png" alt="Strength Bonus">
-    <span><%= weapon.strengthBonus >= 0 ? '+' : ''%><%= weapon.strengthBonus %></span>
-  </div>
-</div>
-<% } %>
-
-<hr>
-
-<% if (shield) { %>
-<div class="shield-stats-row">
-  <div class="shield-stat">
-    <img src="/icons/shields/<%= shield.icon %>" alt="<%= shield.name %>">
-    <span><%= shield.name %></span>
-  </div>
-  <div class="shield-stat">
-    <img src="/icons/main/stab.png" alt="Stab Attack Bonus">
-    <span><%= shield.stabAttack >= 0 ? '+' : ''%><%= shield.stabAttack %></span>
-  </div>
-  <div class="shield-stat">
-    <img src="/icons/main/slash.png" alt="Slash Attack Bonus">
-    <span><%= shield.slashAttack >= 0 ? '+' : ''%><%= shield.slashAttack %></span>
-  </div>
-  <div class="shield-stat">
-    <img src="/icons/main/crush.png" alt="Crush Attack Bonus">
-    <span><%= shield.crushAttack >= 0 ? '+' : ''%><%= shield.crushAttack %></span>
-  </div>
-  <div class="shield-stat">
-    <img src="/icons/main/stab.png" alt="Stab Defence Bonus">
-    <span><%= shield.stabDefence >= 0 ? '+' : ''%><%= shield.stabDefence %></span>
-  </div>
-  <div class="shield-stat">
-    <img src="/icons/main/slash.png" alt="Slash Defence Bonus">
-    <span><%= shield.slashDefence >= 0 ? '+' : ''%><%= shield.slashDefence %></span>
-  </div>
-  <div class="shield-stat">
-    <img src="/icons/main/crush.png" alt="Crush Defence Bonus">
-    <span><%= shield.crushDefence >= 0 ? '+' : ''%><%= shield.crushDefence %></span>
-  </div>
-  <div class="shield-stat">
-    <img src="/icons/main/str.png" alt="Strength Bonus">
-    <span><%= shield.strengthBonus >= 0 ? '+' : ''%><%= shield.strengthBonus %></span>
-  </div>
-</div>
-<% } %>
 
 <div class="game-area">
   <!-- Game content goes here -->

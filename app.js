@@ -1,6 +1,8 @@
 const express = require('express');
 const path = require('path');
+
 const sequelize = require('./config/database');
+const {calcMaxHit } = require('./utils/combat');
 
 const Player = require('./models/player');
 const Weapon = require('./models/weapon');
@@ -22,7 +24,8 @@ app.get('/game', async (req, res) => {
   const player = await Player.findOne({ where: { name: 'Shappy' } });
   const weapon = await Weapon.findOne({ where: { name: 'Bronze sword' } });
   const shield = await Shield.findOne({ where: { name: 'Wooden shield' } });
-  res.render('game', { player, weapon, shield });
+  let maxHit = calcMaxHit(player, weapon, shield);
+  res.render('game', { player, weapon, shield, maxHit });
 });
 
 sequelize.sync({ force: true }).then(async () => {

@@ -7,20 +7,12 @@ body {
   align-items: center;
   justify-content: center;
   height: 100vh;
-  background-color: #f4f4f4;
+  background-color: #1c1c1c;
 }
 
 h1 {
   font-size: 2.5rem;
   margin-bottom: 20px;
-}
-
-hr {
-  border: 0;
-  height: 2px;
-  width: 100%;
-  background: linear-gradient(to right, #333, #ddd, #333);
-  margin: 0;
 }
 
 .container {
@@ -41,30 +33,74 @@ hr {
   background-color: #0056b3;
 }
 
-.player-stats-row,
-.weapon-stats-row,
-.shield-stats-row {
+.stats-banner {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.stat-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+  margin: 5px;
+  border-radius: 5px;
+  background-color: #333;
+  color: #fff;
+  min-width: 200px;
+}
+
+.group-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.group-header img {
+  width: 24px;
+  height: 24px;
+  margin-right: 8px;
+}
+
+.group-header span {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #fff;
+}
+
+.stat-row {
   display: flex;
   justify-content: space-around;
   width: 100%;
-  background-color: #333;
-  color: #fff;
-  padding: 10px 0;
 }
 
-.player-stat,
-.weapon-stat,
-.shield-stat {
+.stat-item {
   display: flex;
-  align-items: center;
+  text-align: center;
 }
 
-.player-stat img,
-.weapon-stat img,
-.shield-stat img {
+.stat-item img {
   width: 20px;
   height: 20px;
   margin-right: 5px;
+}
+
+.player-info-group {
+  background-color: #3a3a3a;
+}
+
+.attack-group {
+  background-color: #8b0000;
+}
+
+.defence-group {
+  background-color: #1e3a5f;
+}
+
+.strength-group {
+  background-color: #2e8b57;
 }
 
 .game-area {
@@ -73,5 +109,5 @@ hr {
   align-items: center;
   justify-content: center;
   width: 100%;
-  background-color: #eaeaea;
+  background-color: #1c1c1c;
 }
