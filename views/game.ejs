@@ -28,7 +28,7 @@
 <div class="weapon-stats-row">
   <div class="weapon-stat">
     <img src="/icons/weapons/<%= weapon.icon %>" alt="<%= weapon.name %>">
-    <span><%= weapon.name %></span>
+    <span><%= weapon.name %> (<%= weapon.speed %>)</span>
   </div>
   <div class="weapon-stat">
     <img src="/icons/main/stab.png" alt="Stab Attack Bonus">
@@ -57,6 +57,45 @@
   <div class="weapon-stat">
     <img src="/icons/main/str.png" alt="Strength Bonus">
     <span><%= weapon.strengthBonus >= 0 ? '+' : ''%><%= weapon.strengthBonus %></span>
+  </div>
+</div>
+<% } %>
+
+<hr>
+
+<% if (shield) { %>
+<div class="shield-stats-row">
+  <div class="shield-stat">
+    <img src="/icons/shields/<%= shield.icon %>" alt="<%= shield.name %>">
+    <span><%= shield.name %></span>
+  </div>
+  <div class="shield-stat">
+    <img src="/icons/main/stab.png" alt="Stab Attack Bonus">
+    <span><%= shield.stabAttack >= 0 ? '+' : ''%><%= shield.stabAttack %></span>
+  </div>
+  <div class="shield-stat">
+    <img src="/icons/main/slash.png" alt="Slash Attack Bonus">
+    <span><%= shield.slashAttack >= 0 ? '+' : ''%><%= shield.slashAttack %></span>
+  </div>
+  <div class="shield-stat">
+    <img src="/icons/main/crush.png" alt="Crush Attack Bonus">
+    <span><%= shield.crushAttack >= 0 ? '+' : ''%><%= shield.crushAttack %></span>
+  </div>
+  <div class="shield-stat">
+    <img src="/icons/main/stab.png" alt="Stab Defence Bonus">
+    <span><%= shield.stabDefence >= 0 ? '+' : ''%><%= shield.stabDefence %></span>
+  </div>
+  <div class="shield-stat">
+    <img src="/icons/main/slash.png" alt="Slash Defence Bonus">
+    <span><%= shield.slashDefence >= 0 ? '+' : ''%><%= shield.slashDefence %></span>
+  </div>
+  <div class="shield-stat">
+    <img src="/icons/main/crush.png" alt="Crush Defence Bonus">
+    <span><%= shield.crushDefence >= 0 ? '+' : ''%><%= shield.crushDefence %></span>
+  </div>
+  <div class="shield-stat">
+    <img src="/icons/main/str.png" alt="Strength Bonus">
+    <span><%= shield.strengthBonus >= 0 ? '+' : ''%><%= shield.strengthBonus %></span>
   </div>
 </div>
 <% } %>

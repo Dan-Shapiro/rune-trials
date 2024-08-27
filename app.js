@@ -1,9 +1,10 @@
 const express = require('express');
 const path = require('path');
 const sequelize = require('./config/database');
+
 const Player = require('./models/player');
 const Weapon = require('./models/weapon');
-const { name } = require('ejs');
+const Shield = require('./models/shield');
 
 const app = express();
 
@@ -20,7 +21,8 @@ app.get('/', (req, res) => {
 app.get('/game', async (req, res) => {
   const player = await Player.findOne({ where: { name: 'Shappy' } });
   const weapon = await Weapon.findOne({ where: { name: 'Bronze sword' } });
-  res.render('game', { player, weapon });
+  const shield = await Shield.findOne({ where: { name: 'Wooden shield' } });
+  res.render('game', { player, weapon, shield });
 });
 
 sequelize.sync({ force: true }).then(async () => {
@@ -49,7 +51,19 @@ sequelize.sync({ force: true }).then(async () => {
         { attackType: 'slash', weaponStyle: 'aggressive', icon: '/icons/main/slash-attack.png' },
         { attackType: 'stab', weaponStyle: 'defensive', icon: '/icons/main/block-attack.png' }
       ],
-      icon: 'bronze_sword.png'
+      icon: 'bronze-sword.png'
+    });
+
+    await Shield.create({
+      name: 'Wooden shield',
+      stabAttack: 0,
+      slashAttack: 0,
+      crushAttack: 0,
+      stabDefence: 4,
+      slashDefence: 5,
+      crushDefence: 3,
+      strengthBonus: 0,
+      icon: 'wooden-shield.png'
     });
 
     const PORT = process.env.PORT || 3000;
