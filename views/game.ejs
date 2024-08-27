@@ -1,12 +1,27 @@
 <%- include('partials/header.ejs'); %>
 
 <div class="player-attributes">
-  <p><strong>Name:</strong> <%= player.name %></p>
-  <p><strong>HP:</strong> <%= player.hp %></p>
-  <p><strong>Attack Level:</strong> <%= player.attackLevel %></p>
-  <p><strong>Strength Level:</strong> <%= player.strengthLevel %></p>
-  <p><strong>Defence Level:</strong> <%= player.defenceLevel %></p>
+  <div class="attribute">
+    <span><%= player.name %></span>
+  </div>
+  <div class="attribute">
+      <img src="/icons/hp.png" alt="HP Icon">
+      <span><%= player.hp %></span>
+  </div>
+  <div class="attribute">
+      <img src="/icons/atk.png" alt="Attack Icon">
+      <span><%= player.attackLevel %></span>
+  </div>
+  <div class="attribute">
+      <img src="/icons/str.png" alt="Strength Icon">
+      <span><%= player.strengthLevel %></span>
+  </div>
+  <div class="attribute">
+      <img src="/icons/def.png" alt="Defence Icon">
+      <span><%= player.defenceLevel %></span>
+  </div>
 </div>
+
 <div class="game-area">
   <!-- Game content goes here -->
 </div>
