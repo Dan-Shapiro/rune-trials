@@ -2,12 +2,13 @@ const express = require('express');
 const path = require('path');
 
 const sequelize = require('./config/database');
-const {calcMaxHit, calcCost } = require('./utils/combat');
+const {calcMaxHit, calcCost, performAttack } = require('./utils/combat');
 
 const Player = require('./models/player');
 const Weapon = require('./models/weapon');
 const Shield = require('./models/shield');
 const Card = require('./models/card');
+const Enemy = require('./models/enemy');
 
 const app = express();
 
@@ -39,7 +40,11 @@ app.get('/game', async (req, res) => {
   deck.push(await Card.findOne({ where: { name: 'Savage Slash' } }));
   deck.push(await Card.findOne({ where: { name: 'Guarded Block' } }));
 
-  res.render('game', { player, weapon, shield, maxHit, deck });
+  const enemies = []
+  enemies.push(await Enemy.findOne({ where: { name: 'Goblin' } }));
+  enemies.push(await Enemy.findOne({ where: { name: 'Goblin' } }));
+
+  res.render('game', { player, weapon, shield, maxHit, deck, enemies });
 });
 
 const PORT = process.env.PORT || 3000;

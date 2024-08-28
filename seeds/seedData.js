@@ -3,6 +3,7 @@ const Player = require('../models/player');
 const Weapon = require('../models/weapon');
 const Shield = require('../models/shield');
 const Card = require('../models/card');
+const Enemy = require('../models/enemy');
 
 async function seed() {
     await sequelize.sync({ force: true });
@@ -89,6 +90,24 @@ async function seed() {
       type: 'attack',
       attackType: 'stab',
       weaponStyle: 'defensive'
+    });
+
+    const goblin = await Enemy.create({
+      name: 'Goblin',
+      level: 2,
+      attackType: 'crush',
+      maxHit: 1,
+      speed: 4,
+      hp: 5,
+      attackLevel: 1,
+      strengthLevel: 1,
+      defenceLevel: 1,
+      attackBonus: -21,
+      strengthBonus: -15,
+      stabDefence: -15,
+      slashDefence: -15,
+      crushDefence: -15,
+      image: '/icons/enemies/goblin.png'
     });
 
     console.log('Seed data created successfully!');

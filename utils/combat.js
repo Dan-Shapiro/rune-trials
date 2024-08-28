@@ -46,14 +46,16 @@ function calcDefRoll(player, weapon, shield, style='stab', stance='accurate') {
 
   let effDef = player.defenceLevel + stanceBonus + 8
   let eqBonus = 0;
-  if (style === 'stab') {
-    eqBonus += weapon.stabDefence + shield.stabDefence || 0;
-  } else if (style === 'slash') {
-    eqBonus += weapon.slashDefence + shield.slashDefence || 0;
-  } else if (style === 'crush') {
-    eqBonus += weapon.crushDefence + shield.crushDefence || 0;
+  if (weapon && shield) {
+    if (style === 'stab') {
+      eqBonus += weapon.stabDefence + shield.stabDefence || 0;
+    } else if (style === 'slash') {
+      eqBonus += weapon.slashDefence + shield.slashDefence || 0;
+    } else if (style === 'crush') {
+      eqBonus += weapon.crushDefence + shield.crushDefence || 0;
+    }
   }
-
+  
   return effDef * (eqBonus + 64);
 }
 
@@ -72,9 +74,9 @@ function calcDamage(maxHit) {
   return Math.floor(Math.random() * maxHit) + 1;
 }
 
-function performAttack(player, weapon, shield, style='stab', stance='accurate') {
+function performAttack(player, enemy, weapon, shield, style='stab', stance='accurate') {
   const atkRoll = calcAtkRoll(player, weapon, shield, style, stance);
-  const defRoll = 0 // to do
+  const defRoll = calcDefRoll(enemy, null, null, 'crush', 'controlled');
   const hitChance = calcHitChance(atkRoll, defRoll);
 
   if (Math.random() <= hitChance) {

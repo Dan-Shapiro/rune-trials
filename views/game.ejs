@@ -89,29 +89,63 @@
 </div>
 
 <div class="game-area">
-  <div class="deck-grid">
-    <% deck.forEach(function(card) { %>
-    <div class="card">
-      <div class="card-cost">
-        <span><%= weapon.speed + card.costModifier %></span>
+  <div class="enemies-container">
+  <% enemies.forEach(function(enemy) { %>
+    <div class="enemy-container">
+      <div class="enemy-info">
+        <h2><%= enemy.name %> (Level - <%= enemy.level %>)</h2>
       </div>
-      <div class="card-header">
-        <span class="card-name"><%= card.name %></span>
+      <div class="enemy-image">
+        <img src="<%= enemy.image %>" alt="<%= enemy.name %>">
       </div>
-      <div class="card-image">
-        <img src="<%= card.image %>" alt="<%= card.name %>">
-      </div>
-      <div class="card-type">
-        <span><%= capitalizeFirstLetter(card.type) %></span>
-        <% if (card.type === 'attack') { %>
-          <span class="card-atk-details"><%= capitalizeFirstLetter(card.weaponStyle) %> <%= capitalizeFirstLetter(card.attackType) %></span>
-        <% } %>
-      </div>
-      <div class="card-text">
-        <p><%= card.text %></p>
+      <div class="enemy-stats">
+        <div class="enemy-stat">
+          <img src="/icons/main/hp.png" alt="HP">
+          <span><%= enemy.hp %></span>
+        </div>
+        <div class="enemy-stat">
+          <img src="/icons/main/speed.png" alt="Attack Speed">
+          <span><%= enemy.speed %></span>
+        </div>
+        <div class="enemy-stat">
+          <img src="/icons/main/hitsplat.png" alt="Max Hit">
+          <span><%= enemy.maxHit %></span>
+        </div>
+        <div class="enemy-stat">
+          <img src="/icons/main/<%= enemy.attackType %>.png" alt="<%= capitalizeFirstLetter(enemy.attackType) %>">
+        </div>
       </div>
     </div>
-    <% }) %>
+  <% }) %>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="deck-bar">
+    <div class="deck-grid">
+      <% deck.forEach(function(card) { %>
+      <div class="card">
+        <div class="card-cost">
+          <span><%= weapon.speed + card.costModifier %></span>
+        </div>
+        <div class="card-header">
+          <span class="card-name"><%= card.name %></span>
+        </div>
+        <div class="card-image">
+          <img src="<%= card.image %>" alt="<%= card.name %>">
+        </div>
+        <div class="card-type">
+          <span><%= capitalizeFirstLetter(card.type) %></span>
+          <% if (card.type === 'attack') { %>
+            <span class="card-atk-details"><%= capitalizeFirstLetter(card.weaponStyle) %> <%= capitalizeFirstLetter(card.attackType) %></span>
+          <% } %>
+        </div>
+        <div class="card-text">
+          <p><%= card.text %></p>
+        </div>
+      </div>
+      <% }) %>
+    </div>
   </div>
 </div>
 
