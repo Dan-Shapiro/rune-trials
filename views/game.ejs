@@ -8,7 +8,11 @@
     <div class="stat-row">
       <div class="stat-item">
         <img src="/icons/main/hp.png" alt="Hitpoints">
-        <span><%= player.hp %></span>
+        <span><%= hp %></span>
+      </div>
+      <div class="stat-item">
+        <img src="/icons/main/essence.png" alt="Essence">
+        <span><%= essence %></span>
       </div>
       <div class="stat-item">
         <img src="/icons/main/speed.png" alt="Attack Speed">
@@ -90,8 +94,8 @@
 
 <div class="game-area">
   <div class="enemies-container">
-  <% enemies.forEach(function(enemy) { %>
-    <div class="enemy-container">
+  <% enemies.forEach(function(enemy, index) { %>
+    <div class="enemy-container" data-enemy-id="<%= enemy.id %>">
       <div class="enemy-info">
         <h2><%= enemy.name %> (Level - <%= enemy.level %>)</h2>
       </div>
@@ -124,7 +128,7 @@
   <div class="deck-bar">
     <div class="deck-grid">
       <% deck.forEach(function(card) { %>
-      <div class="card">
+      <div class="card" data-card-id="<%= card.id %>">
         <div class="card-cost">
           <span><%= weapon.speed + card.costModifier %></span>
         </div>
@@ -149,4 +153,5 @@
   </div>
 </div>
 
+<script src="/js/game.js"></script>
 <%- include('partials/footer.ejs'); %>

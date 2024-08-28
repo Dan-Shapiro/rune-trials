@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const session = require('express-session');
 
 const sequelize = require('./config/database');
 const {calcMaxHit, calcCost, performAttack } = require('./utils/combat');
@@ -17,6 +18,8 @@ app.set('views', path.join(__dirname, 'views'));
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
 app.use((req, res, next) => {
   res.locals.capitalizeFirstLetter = function(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
@@ -24,15 +27,24 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false }
+}));
+
 app.get('/', (req, res) => {
   res.render('index');
 });
 
 app.get('/game', async (req, res) => {
-  const player = await Player.findOne({ where: { name: 'Shappy' } });
-  const weapon = await Weapon.findOne({ where: { name: 'Bronze sword' } });
-  const shield = await Shield.findOne({ where: { name: 'Wooden shield' } });
-  const maxHit = calcMaxHit(player, weapon, shield);
+  req.session.player = await Player.findOne({ where: { name: 'Shappy' } });
+  req.session.weapon = await Weapon.findOne({ where: { name: 'Bronze sword' } });
+  req.session.shield = await Shield.findOne({ where: { name: 'Wooden shield' } });
+  req.session.maxHit = calcMaxHit(req.session.player, req.session.weapon, req.session.shield);
+  req.session.essence = 12;
+  req.session.hp = req.session.player.hp;
 
   const deck = [];
   deck.push(await Card.findOne({ where: { name: 'Pinpoint Stab' } }));
@@ -42,9 +54,44 @@ app.get('/game', async (req, res) => {
 
   const enemies = []
   enemies.push(await Enemy.findOne({ where: { name: 'Goblin' } }));
-  enemies.push(await Enemy.findOne({ where: { name: 'Goblin' } }));
 
-  res.render('game', { player, weapon, shield, maxHit, deck, enemies });
+  res.render('game', {
+    player: req.session.player,
+    weapon: req.session.weapon,
+    shield: req.session.shield,
+    maxHit: req.session.maxHit,
+    essence: req.session.essence,
+    hp: req.session.hp,
+    deck,
+    enemies });
+});
+
+app.post('/playCard', async (req, res) => {
+  const { cardId, enemyId } = req.body;
+
+  if (!cardId || !enemyId) {
+    return res.status(400).json({ success: false, message: 'Card ID or Enemy ID is missing or undefined.' });
+  }
+
+  const card = await Card.findOne({ where: { id: cardId } });
+  const enemy = await Enemy.findOne({ where: { id: enemyId } });
+  const player = req.session.player;
+  const weapon = req.session.weapon;
+  const shield = req.session.shield;
+
+  const damage = performAttack(player, enemy, weapon, shield, card.attackType, card.weaponStyle);
+
+  let message;
+  if (damage > 0) {
+    message = `Attack successful! Enemy took ${damage} damage.`;
+  } else {
+    message = `Attack missed! WOMP WOMP`;
+  }
+
+  res.json({
+    success: true,
+    message: message
+  });
 });
 
 const PORT = process.env.PORT || 3000;
