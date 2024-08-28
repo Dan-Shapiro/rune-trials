@@ -2,6 +2,7 @@ const sequelize = require('../config/database');
 const Player = require('../models/player');
 const Weapon = require('../models/weapon');
 const Shield = require('../models/shield');
+const Card = require('../models/card');
 
 async function seed() {
     await sequelize.sync({ force: true });
@@ -44,6 +45,50 @@ async function seed() {
       crushDefence: 3,
       strengthBonus: 0,
       icon: 'wooden-shield.png'
+    });
+
+    const pinpointStab = await Card.create({
+      name: 'Pinpoint Stab',
+      costModifier: 0,
+      text: 'A precise stab with enhanced accuracy.',
+      image: '/icons/attacks/stab.png',
+      function: 'accurateStab',
+      type: 'attack',
+      attackType: 'stab',
+      weaponStyle: 'accurate'
+    });
+  
+    const viciousLunge = await Card.create({
+      name: 'Vicious Lunge',
+      costModifier: 1,
+      text: 'A forceful lunge that sacrifices accuracy for increased damage.',
+      image: '/icons/attacks/lunge.png',
+      function: 'aggressiveStab',
+      type: 'attack',
+      attackType: 'stab',
+      weaponStyle: 'aggressive'
+    });
+  
+    const savageSlash = await Card.create({
+      name: 'Savage Slash',
+      costModifier: 2,
+      text: 'A powerful slash attack with a reckless approach.',
+      image: '/icons/attacks/slash.png',
+      function: 'aggressiveSlash',
+      type: 'attack',
+      attackType: 'slash',
+      weaponStyle: 'aggressive'
+    });
+  
+    const guardedBlock = await Card.create({
+      name: 'Guarded Block',
+      costModifier: 0,
+      text: 'A cautious block that balances offense and defence.',
+      image: '/icons/attacks/block.png',
+      function: 'defensiveStab',
+      type: 'attack',
+      attackType: 'stab',
+      weaponStyle: 'defensive'
     });
 
     console.log('Seed data created successfully!');

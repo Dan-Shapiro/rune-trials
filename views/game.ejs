@@ -89,7 +89,30 @@
 </div>
 
 <div class="game-area">
-  <!-- Game content goes here -->
+  <div class="deck-grid">
+    <% deck.forEach(function(card) { %>
+    <div class="card">
+      <div class="card-cost">
+        <span><%= weapon.speed + card.costModifier %></span>
+      </div>
+      <div class="card-header">
+        <span class="card-name"><%= card.name %></span>
+      </div>
+      <div class="card-image">
+        <img src="<%= card.image %>" alt="<%= card.name %>">
+      </div>
+      <div class="card-type">
+        <span><%= capitalizeFirstLetter(card.type) %></span>
+        <% if (card.type === 'attack') { %>
+          <span class="card-atk-details"><%= capitalizeFirstLetter(card.weaponStyle) %> <%= capitalizeFirstLetter(card.attackType) %></span>
+        <% } %>
+      </div>
+      <div class="card-text">
+        <p><%= card.text %></p>
+      </div>
+    </div>
+    <% }) %>
+  </div>
 </div>
 
 <%- include('partials/footer.ejs'); %>
