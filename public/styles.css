@@ -6,6 +6,13 @@
 }
 
 @font-face {
+  font-family: 'RS-Plain-11';
+  src: url('./fonts/plain-11.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
   font-family: 'RS-Quill';
   src: url('./fonts/quill.ttf') format('truetype');
   font-weight: normal;
@@ -177,6 +184,9 @@ h1 {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+  position: relative;
+  width: 100%;
+  height: 100%;
 }
 
 .game-area {
@@ -188,19 +198,23 @@ h1 {
 }
 
 /* Player Area */
-.player-container {
+.sprite-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 300px;
   height: 100%;
   border-radius: 10px;
-  margin-right: 20px;
   background-color: #1c1c1c;
 }
 
-.player {
+.player-container {
+  width: 300px;
+  margin-right: 20px;
+}
+
+.player,
+.enemy {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -226,7 +240,8 @@ h1 {
   margin-right: 0;
 }
 
-.player-equipment span {
+.player-equipment span,
+.enemy-info span {
   font-family: 'RS-Bold-12';
   margin-bottom: 5px;
   font-weight: bold;
@@ -237,20 +252,25 @@ h1 {
   height: 100px;
 }
 
-.player-image {
+.player-image,
+.enemy-image {
   width: 100%;
   display: flex;
   justify-content: center;
   margin-top: 10px;
 }
 
-.player-image img {
-  width: 150px;
+.sprite-image {
   height: auto;
   border-radius: 8px;
 }
 
-.hp-bar {
+.player-image img {
+  width: 150px;
+}
+
+.hp-bar,
+.enemy-hp-bar {
   width: 80%;
   height: 20px;
   background-color: #444;
@@ -262,7 +282,8 @@ h1 {
   justify-content: center;
 }
 
-#player-hp {
+#player-hp,
+.enemy-hp {
   z-index: 2;
 }
 
@@ -276,7 +297,8 @@ h1 {
   z-index: 1;
 }
 
-.weapon-stats {
+.weapon-stat-row,
+.enemy-stat-row {
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -287,14 +309,16 @@ h1 {
   padding: 5px;
 }
 
-.weapon-stat {
+.weapon-stat,
+.enemy-stat {
   display: flex;
   align-items: center;
-  margin-right: 20px;
+  margin-right: 10px;
   height: 100%;
 }
 
-.weapon-stat img {
+.weapon-stat img,
+.enemy-stat img {
   width: 20px;
   height: 20px;
   margin-right: 5px;
@@ -304,11 +328,27 @@ h1 {
 .enemies-container {
   flex-grow: 1;
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
   background-color: #1c1c1c;
   border-radius: 10px;
   padding: 20px;
+}
+
+.enemy-container {
+  width: 200px;
+  background-color: #222;
+  margin: 0 5px;
+  flex-grow: 1;
+}
+
+.enemy-image img {
+  width: 100px;
+}
+
+.enemy-hp-bar,
+.enemy-stat-row {
+  max-width: 180px;
 }
 
 /* Hand Area */
@@ -317,6 +357,210 @@ h1 {
   background-color: #1c1c1c;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   padding: 10px;
+  border-top: 2px solid #444;
+}
+
+.deck-info,
+.discard-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  margin: 20px;
+}
+
+.deck-info img,
+.discard-info img {
+  width: 75px;
+  height: auto;
+}
+
+.deck-count {
+  position: absolute;
+  bottom: -10px;
+  right: -10px;
+  width: 24px;
+  height: 24px;
+  background-color: #8b0000;
+  color: #ffff00;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'RS-Bold-12', sans-serif;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.discard-count {
+  position: absolute;
+  bottom: -10px;
+  left: -10px;
+  width: 24px;
+  height: 24px;
+  background-color: #8b0000;
+  color: #ffff00;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'RS-Bold-12', sans-serif;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.hand-cards {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 0 10px;
+}
+
+.card-container {
+  position: relative;
+  padding: 8px;
+  width: 120px;
+  height: 232px;
+  font-family: 'RS-Plain-11', sans-serif;
+  color: #ffff00;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #8b0000;
+  border: 2px solid #000;
+  border-radius: 8px;
+  padding: 10px;
+  width: 112px;
+  height: 212px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  position: relative;
+}
+
+.card-cost {
+  position: absolute;
+  top: -8px;
+  left: -8px;
+  width: 24px;
+  height: 24px;
+  background-image: url('/icons/main/essence.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-family: 'RS-Bold-12', sans-serif;
+  font-weight: bold;
+  color: #333;
+}
+
+.card-name {
+  font-family: 'RS-Quill-8';
+  color: #fff;
+}
+
+.card-image {
+  margin-top: 5px;
+  width: 110px;
+  height: 80px;
+  border: 1px solid #000;
+  border-radius: 4px;
+  padding: 5px;
+}
+
+.card-image img {
+  width: 100%;
+  height: 70px;
+  border-radius: 4px;
+}
+
+.card-type {
+  margin-top: 10px;
+  border: 1px solid #000;
+  border-radius: 4px;
+  padding: 2px;
+  color: #fff;
+  width: 100%;
+}
+
+.card-type div {
+  color: #ffff00;
+}
+
+.card-text {
+  margin-top: 5px;
+  padding: 2px;
+  border-radius: 4px;
+  border: 1px solid #000;
+  width: 100%;
+  height: 100%;
+  background-color: #333;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.floating-essence {
+  position: absolute;
+  left: 300px;
+  bottom: 240px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 75px;
+  height: 75px;
+}
+
+.essence-info {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-image: url('/icons/main/essence.png');
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+}
+
+.essence-count {
+  position: absolute;
+  font-family: 'RS-Bold-12', sans-serif;
+  font-weight: bold;
+}
+
+.floating-end-turn {
+  position: absolute;
+  right: 300px;
+  bottom: 240px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.end-turn-button {
+  padding: 15px 30px;
+  background-color: #d32f2f;
+  color: #fff;
+  font-family: 'RS-Bold-12', sans-serif;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  transition: background-color 0.3s ease; 
+}
+
+.end-turn-button:hover {
+  background-color: #b71c1c;
 }

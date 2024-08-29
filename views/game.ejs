@@ -69,7 +69,7 @@
 
 <div class="game-container">
   <div class="game-area">
-    <div class="player-container">
+    <div class="player-container sprite-container">
       <div class="player">
         <div class="player-equipment-row">
           <div class="player-equipment">
@@ -82,7 +82,7 @@
           </div>
         </div>
         
-        <div class="player-image">
+        <div class="player-image sprite-image">
           <img src="/icons/main/player.png" alt="<%= player.name %>">
         </div>
       </div>
@@ -92,7 +92,7 @@
          <span id="player-hp"><%= hp %>/<%= player.hp %></span>
       </div>
 
-      <div class="weapon-stats">
+      <div class="weapon-stat-row">
         <span class="weapon-stat">
           <img src="/icons/main/speed.png" alt="Attack Speed">
           <span><%= weapon.speed %></span>
@@ -105,82 +105,84 @@
     </div>
 
     <div class="enemies-container">
+      <% enemies.forEach(function(enemyObj) { %>
+        <div class="enemy-container sprite-container" data-enemy-id="<%= enemyObj.enemy.id %>">
+          <div class="enemy">
+            <div class="enemy-info">
+              <span><%= enemyObj.enemy.name %> (Level - <%= enemyObj.enemy.level %>)</span>
+            </div>
 
+            <div class="enemy-image sprite-image">
+              <img src="<%= enemyObj.enemy.image %>" alt="<%= enemyObj.enemy.name %>">
+            </div>
+          </div>
+
+          <div class="enemy-hp-bar">
+            <div class="hp-bar-fill" style="width: calc(<%= enemyObj.hp %> / <%= enemyObj.enemy.hp %> * 100%);"></div>
+            <span class="enemy-hp"><%= enemyObj.hp %>/<%= enemyObj.enemy.hp %></span>
+          </div>
+
+          <div class="enemy-stat-row">
+            <span class="enemy-stat">
+              <img src="/icons/main/<%= enemyObj.enemy.attackType %>.png" alt="<%= capitalizeFirstLetter(enemyObj.enemy.attackType) %>">
+            </span>
+            <span class="enemy-stat">
+              <img src="/icons/main/speed.png" alt="Attack Speed">
+              <span><%= enemyObj.enemy.speed %></span>
+            </span>
+            <span class="enemy-stat">
+              <img src="/icons/main/hitsplat.png" alt="Max Hit">
+              <span><%= enemyObj.enemy.maxHit %></span>
+            </span>
+          </div>
+        </div>
+      <% }) %>
     </div>
+  </div>
+</div>
+
+<div class="floating-essence">
+  <div class="essence-info">
+    <span class="essence-count"><%= essence %>/12</span>
   </div>
 </div>
 
 <div class="hand-area">
-
-</div>
-
-<!--
-
-<div class="equipment-item">
-  <img src="/icons/weapons/<%= weapon.icon %>" alt="<%= weapon.name %>">
-</div>
-<div class="equipment-item">
-  <img src="/icons/shields/<%= shield.icon %>" alt="<%= shield.name %>">
-</div>
-
-
-<div class="enemies-container">
-<% enemies.forEach(function(enemy, index) { %>
-  <div class="enemy-container" data-enemy-id="<%= enemy.id %>">
-    <div class="enemy-info">
-      <h2><%= enemy.name %> (Level - <%= enemy.level %>)</h2>
-    </div>
-    <div class="enemy-image">
-      <img src="<%= enemy.image %>" alt="<%= enemy.name %>">
-    </div>
-    <div class="enemy-stats">
-      <div class="enemy-stat">
-        <img src="/icons/main/hp.png" alt="HP">
-        <span><%= enemy.hp %></span>
-      </div>
-      <div class="enemy-stat">
-        <img src="/icons/main/speed.png" alt="Attack Speed">
-        <span><%= enemy.speed %></span>
-      </div>
-      <div class="enemy-stat">
-        <img src="/icons/main/hitsplat.png" alt="Max Hit">
-        <span><%= enemy.maxHit %></span>
-      </div>
-      <div class="enemy-stat">
-        <img src="/icons/main/<%= enemy.attackType %>.png" alt="<%= capitalizeFirstLetter(enemy.attackType) %>">
-      </div>
-    </div>
+  <div class="deck-info">
+    <img src="/icons/main/melee-deck.png" alt="Deck">
+    <span class="deck-count"><%= cards.deck.length %></span>
   </div>
-<% }) %>
-</div>
 
-<div class="deck-bar">
-  <div class="deck-grid">
-    <% deck.forEach(function(card) { %>
-    <div class="card" data-card-id="<%= card.id %>">
-      <div class="card-cost">
-        <span><%= weapon.speed + card.costModifier %></span>
+  <div class="hand-cards">
+    <% cards.hand.forEach(function(card) { %>
+      <div class="card-container">
+        <div class="card">
+          <div class="card-cost"><%= card.costModifier + weapon.speed %></div>
+          <div class="card-name"><%= card.name %></div>
+          <div class="card-image">
+            <img src="<%= card.image %>" alt="<%= card.name %>">
+          </div>
+          <div class="card-type">
+            <%= capitalizeFirstLetter(card.type) %>
+            <% if (card.type === 'attack') { %>
+              <div><%= capitalizeFirstLetter(card.weaponStyle) %> <%= capitalizeFirstLetter(card.attackType) %></div>
+            <% } %>
+          </div>
+          <div class="card-text"><%= card.text %></div>
+        </div>
       </div>
-      <div class="card-header">
-        <span class="card-name"><%= card.name %></span>
-      </div>
-      <div class="card-image">
-        <img src="<%= card.image %>" alt="<%= card.name %>">
-      </div>
-      <div class="card-type">
-        <span><%= capitalizeFirstLetter(card.type) %></span>
-        <% if (card.type === 'attack') { %>
-          <span class="card-atk-details"><%= capitalizeFirstLetter(card.weaponStyle) %> <%= capitalizeFirstLetter(card.attackType) %></span>
-        <% } %>
-      </div>
-      <div class="card-text">
-        <p><%= card.text %></p>
-      </div>
-    </div>
     <% }) %>
   </div>
+  
+  <div class="discard-info">
+    <img src="/icons/main/discard.png" alt="Discard Pile">
+    <span class="discard-count"><%= cards.discard.length %></span>
+  </div>
 </div>
--->
+
+<div class="floating-end-turn">
+  <button class="end-turn-button">End Turn</button>
+</div>
 
 <script src="/js/game.js"></script>
 <%- include('partials/footer.ejs'); %>

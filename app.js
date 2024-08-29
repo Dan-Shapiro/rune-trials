@@ -4,6 +4,7 @@ const session = require('express-session');
 
 const sequelize = require('./config/database');
 const {calcMaxHit, calcCost, performAttack } = require('./utils/combat');
+const { shuffleDeck, drawX } = require('./utils/deck');
 
 const Player = require('./models/player');
 const Weapon = require('./models/weapon');
@@ -46,14 +47,40 @@ app.get('/game', async (req, res) => {
   req.session.essence = 12;
   req.session.hp = req.session.player.hp;
 
-  const deck = [];
-  deck.push(await Card.findOne({ where: { name: 'Pinpoint Stab' } }));
-  deck.push(await Card.findOne({ where: { name: 'Vicious Lunge' } }));
-  deck.push(await Card.findOne({ where: { name: 'Savage Slash' } }));
-  deck.push(await Card.findOne({ where: { name: 'Guarded Block' } }));
+  let deck = [];
+  let hand = [];
+  let discard = [];
+  let exile = [];
+
+  const cards = {
+    deck: deck,
+    hand: hand,
+    discard: discard,
+    exile: exile
+  }
+
+  cards.deck.push(await Card.findOne({ where: { name: 'Pinpoint Stab' } }));
+  cards.deck.push(await Card.findOne({ where: { name: 'Vicious Lunge' } }));
+  cards.deck.push(await Card.findOne({ where: { name: 'Savage Slash' } }));
+  cards.deck.push(await Card.findOne({ where: { name: 'Guarded Block' } }));
+  cards.deck.push(await Card.findOne({ where: { name: 'Pinpoint Stab' } }));
+  cards.deck.push(await Card.findOne({ where: { name: 'Vicious Lunge' } }));
+  cards.deck.push(await Card.findOne({ where: { name: 'Savage Slash' } }));
+  cards.deck.push(await Card.findOne({ where: { name: 'Guarded Block' } }));
+  cards.deck.push(await Card.findOne({ where: { name: 'Pinpoint Stab' } }));
+  cards.deck.push(await Card.findOne({ where: { name: 'Vicious Lunge' } }));
+  cards.deck.push(await Card.findOne({ where: { name: 'Savage Slash' } }));
+  cards.deck.push(await Card.findOne({ where: { name: 'Guarded Block' } }));
 
   const enemies = []
-  enemies.push(await Enemy.findOne({ where: { name: 'Goblin' } }));
+  const enemy = await Enemy.findOne({ where: { name: 'Goblin' } });
+  enemies.push({
+    enemy: enemy,
+    hp: enemy.hp
+  });
+
+  shuffleDeck(cards.deck);
+  const drawn = drawX(cards, 5);
 
   res.render('game', {
     player: req.session.player,
@@ -62,7 +89,7 @@ app.get('/game', async (req, res) => {
     maxHit: req.session.maxHit,
     essence: req.session.essence,
     hp: req.session.hp,
-    deck,
+    cards,
     enemies });
 });
 
