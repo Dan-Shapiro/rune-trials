@@ -155,7 +155,7 @@
   <div class="hand-cards">
     <% cards.hand.forEach(function(card) { %>
       <div class="card-container">
-        <div class="card">
+        <div class="card" data-card-id="<%= card.id %>">
           <div class="card-cost"><%= card.costModifier + weapon.speed %></div>
           <div class="card-name"><%= card.name %></div>
           <div class="card-image">

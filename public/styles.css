@@ -264,6 +264,7 @@ h1 {
 
 .player-image img {
   width: 150px;
+  max-height: 300px;
 }
 
 .hp-bar,
@@ -487,6 +488,12 @@ h1 {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   text-align: center;
   position: relative;
+}
+
+.card.selected {
+  border: 3px solid #ffff00;
+  box-shadow: 0 0 15px rgba(255, 255, 0, 0.8);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border 0.2s ease;
 }
 
 .card-cost {

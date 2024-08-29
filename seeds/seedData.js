@@ -110,6 +110,24 @@ async function seed() {
       image: '/icons/enemies/goblin.png'
     });
 
+    const hillGiant = await Enemy.create({
+      name: 'Hill Giant',
+      level: 28,
+      attackType: 'crush',
+      maxHit: 4,
+      speed: 6,
+      hp: 35,
+      attackLevel: 18,
+      strengthLevel: 22,
+      defenceLevel: 26,
+      attackBonus: 18,
+      strengthBonus: 16,
+      stabDefence: 0,
+      slashDefence: 0,
+      crushDefence: 0,
+      image: '/icons/enemies/hill-giant.png'
+    });
+
     console.log('Seed data created successfully!');
 }
 

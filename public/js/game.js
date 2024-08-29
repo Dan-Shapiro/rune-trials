@@ -3,7 +3,12 @@ let selectedCard = null;
 document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.card').forEach(card => {
     card.addEventListener('click', function() {
-      selectCard(card.getAttribute('data-card-id'));
+      const cardId = card.getAttribute('data-card-id');
+      if (selectedCard === cardId) {
+        deselectCard();
+      } else {
+        selectCard(cardId);
+      }
     });
   });
 
@@ -11,6 +16,12 @@ document.addEventListener('DOMContentLoaded', () => {
     enemy.addEventListener('click', function() {
       selectEnemy(enemy.getAttribute('data-enemy-id'));
     });
+  });
+
+  document.addEventListener('click', function(event) {
+    if (!event.target.closest('.card') && !event.target.closest('.enemy-container')) {
+      deselectCard();
+    }
   });
 });
 
@@ -22,9 +33,17 @@ function selectCard(cardId) {
   document.querySelector(`[data-card-id="${cardId}"]`).classList.add('selected');
 }
 
+function deselectCard() {
+  selectedCard = null;
+  document.querySelectorAll('.card').forEach(card => {
+    card.classList.remove('selected');
+  });
+}
+
 function selectEnemy(enemyId) {
   if (selectedCard !== null) {
     playCardOnEnemy(selectedCard, enemyId);
+    deselectCard();
   } else {
     alert('Please select a card first.');
   }

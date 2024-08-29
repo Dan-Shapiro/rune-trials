@@ -63,20 +63,17 @@ app.get('/game', async (req, res) => {
   cards.deck.push(await Card.findOne({ where: { name: 'Vicious Lunge' } }));
   cards.deck.push(await Card.findOne({ where: { name: 'Savage Slash' } }));
   cards.deck.push(await Card.findOne({ where: { name: 'Guarded Block' } }));
-  cards.deck.push(await Card.findOne({ where: { name: 'Pinpoint Stab' } }));
-  cards.deck.push(await Card.findOne({ where: { name: 'Vicious Lunge' } }));
-  cards.deck.push(await Card.findOne({ where: { name: 'Savage Slash' } }));
-  cards.deck.push(await Card.findOne({ where: { name: 'Guarded Block' } }));
-  cards.deck.push(await Card.findOne({ where: { name: 'Pinpoint Stab' } }));
-  cards.deck.push(await Card.findOne({ where: { name: 'Vicious Lunge' } }));
-  cards.deck.push(await Card.findOne({ where: { name: 'Savage Slash' } }));
-  cards.deck.push(await Card.findOne({ where: { name: 'Guarded Block' } }));
 
   const enemies = []
-  const enemy = await Enemy.findOne({ where: { name: 'Goblin' } });
+  const goblin = await Enemy.findOne({ where: { name: 'Goblin' } });
+  const hillGiant = await Enemy.findOne({ where: { name: 'Hill Giant' } });
   enemies.push({
-    enemy: enemy,
-    hp: enemy.hp
+    enemy: goblin,
+    hp: goblin.hp
+  });
+  enemies.push({
+    enemy: hillGiant,
+    hp: hillGiant.hp
   });
 
   shuffleDeck(cards.deck);
