@@ -1,157 +1,186 @@
 <%- include('partials/header.ejs'); %>
 
 <div class="stats-banner">
-  <div class="stat-group player-info-group">
-    <div class="group-header">
-      <span><%= player.name %></span>
-    </div>
-    <div class="stat-row">
-      <div class="stat-item">
-        <img src="/icons/main/hp.png" alt="Hitpoints">
-        <span><%= hp %></span>
-      </div>
-      <div class="stat-item">
-        <img src="/icons/main/essence.png" alt="Essence">
-        <span><%= essence %></span>
-      </div>
-      <div class="stat-item">
-        <img src="/icons/main/speed.png" alt="Attack Speed">
-        <span><%= weapon.speed %></span>
-      </div>
-      <div class="stat-item">
-        <img src="/icons/main/hitsplat.png" alt="Max Hit">
-        <span><%= maxHit %></span>
-      </div>
-    </div>
-  </div>
+  <span id="player-name"><%= player.name %></span>
 
-  <div class="stat-group player-info-group">
-    <div class="group-header">
-        <img src="/icons/weapons/<%= weapon.icon %>" alt="<%= weapon.name %>">
-        <span><%= weapon.name %></span>
-    </div>
-    <div class="group-header" style="margin-bottom: 0;">
-      <img src="/icons/shields/<%= shield.icon %>" alt="<%= shield.name %>">
-      <span><%= shield.name %></span>
-    </div>
-  </div>
+  <span id="player-combat-style">Melee</span>
 
-  <div class="stat-group attack-group">
-    <div class="group-header">
-      <img src="/icons/main/atk.png" alt="Attack Level">
-      <span><%= player.attackLevel %></span>
-    </div>
-    <div class="stat-row">
-      <div class="stat-item">
-        <img src="/icons/main/stab.png" alt="Stab Attack Bonus">
-        <span><%= weapon.stabAttack + shield.stabAttack >= 0 ? '+' : '' %><%= weapon.stabAttack + shield.stabAttack %></span>
-      </div>
-      <div class="stat-item">
-        <img src="/icons/main/slash.png" alt="Slash Attack Bonus">
-        <span><%= weapon.slashAttack + shield.slashAttack >= 0 ? '+' : '' %><%= weapon.slashAttack + shield.slashAttack %></span>
-      </div>
-      <div class="stat-item">
-        <img src="/icons/main/crush.png" alt="Crush Attack Bonus">
-        <span><%= weapon.crushAttack + shield.crushAttack >= 0 ? '+' : '' %><%= weapon.crushAttack + shield.crushAttack %></span>
-      </div>
-    </div>
-  </div>
+  <span class="player-hp">
+    <img src="/icons/main/hp.png" alt="HP">
+    <span><%= hp %>/<%= player.hp %></span>
+  </span>
 
-  <div class="stat-group defence-group">
-    <div class="group-header">
-      <img src="/icons/main/def.png" alt="Defence Level">
-      <span><%= player.defenceLevel %></span>
-    </div>
-    <div class="stat-row">
-      <div class="stat-item">
-        <img src="/icons/main/stab.png" alt="Stab Defence Bonus">
-        <span><%= weapon.stabDefence + shield.stabDefence >= 0 ? '+' : '' %><%= weapon.stabDefence + shield.stabDefence %></span>
-      </div>
-      <div class="stat-item">
-        <img src="/icons/main/slash.png" alt="Slash Defence Bonus">
-        <span><%= weapon.slashDefence + shield.slashDefence >= 0 ? '+' : '' %><%= weapon.slashDefence + shield.slashDefence %></span>
-      </div>
-      <div class="stat-item">
-        <img src="/icons/main/crush.png" alt="Crush Defence Bonus">
-        <span><%= weapon.crushDefence + shield.crushDefence >= 0 ? '+' : '' %><%= weapon.crushDefence + shield.crushDefence %></span>
-      </div>
-    </div>
-  </div>
+  <span class="player-stats">
+    <span class="pane atk-pane">
+      <span class="lvl">
+        <span id="atk-lvl"><%= player.attackLevel %></span>
+        <img src="/icons/main/atk.png" alt="Attack">
+      </span>
+      <span class="stats">
+        <span class="stat">
+          <img src="/icons/main/stab.png" alt="Stab Attack Bonus">
+          <span><%= weapon.stabAttack + shield.stabAttack >= 0 ? '+' : ''%><%= weapon.stabAttack + shield.stabAttack %></span>
+        </span>
+        <span class="stat">
+          <img src="/icons/main/slash.png" alt="Slash Attack Bonus">
+          <span><%= weapon.slashAttack + shield.slashAttack >= 0 ? '+' : ''%><%= weapon.slashAttack + shield.slashAttack %></span>
+        </span>
+        <span class="stat">
+          <img src="/icons/main/crush.png" alt="Crush Attack Bonus">
+          <span><%= weapon.crushAttack + shield.crushAttack >= 0 ? '+' : ''%><%= weapon.crushAttack + shield.crushAttack %></span>
+        </span>
+      </span>
+    </span>
 
-  <div class="stat-group strength-group">
-    <div class="group-header">
-      <img src="/icons/main/str.png" alt="Strength Level">
-      <span><%= player.strengthLevel %></span>
-    </div>
-    <div class="stat-row">
-      <div class="stat-item">
-        <img src="/icons/main/str.png" alt="Strength Bonus">
-        <span><%= weapon.strengthBonus + shield.strengthBonus >= 0 ? '+' : '' %><%= weapon.strengthBonus + shield.strengthBonus %></span>
-      </div>
-    </div>
-  </div>
+    <span class="pane def-pane">
+      <span class="lvl">
+        <span id="def-lvl"><%= player.defenceLevel %></span>
+        <img src="/icons/main/def.png" alt="Defence">
+      </span>
+      <span class="stats">
+        <span class="stat">
+          <img src="/icons/main/stab.png" alt="Stab Defence Bonus">
+          <span><%= weapon.stabDefence + shield.stabDefence >= 0 ? '+' : ''%><%= weapon.stabDefence + shield.stabDefence %></span>
+        </span>
+        <span class="stat">
+          <img src="/icons/main/slash.png" alt="Slash Defence Bonus">
+          <span><%= weapon.slashDefence + shield.slashDefence >= 0 ? '+' : ''%><%= weapon.slashDefence + shield.slashDefence %></span>
+        </span>
+        <span class="stat">
+          <img src="/icons/main/crush.png" alt="Crush Defence Bonus">
+          <span><%= weapon.crushDefence + shield.crushDefence >= 0 ? '+' : ''%><%= weapon.crushDefence + shield.crushDefence %></span>
+        </span>
+      </span>
+    </span>
+
+    <span class="pane str-pane">
+      <span class="lvl">
+        <span id="str-lvl"><%= player.strengthLevel %></span>
+        <img src="/icons/main/str.png" alt="Strength">
+      </span>
+      <span class="stats">
+        <span class="stat">
+          <span><%= weapon.strengthBonus + shield.strengthBonus >= 0 ? '+' : ''%><%= weapon.strengthBonus + shield.strengthBonus %></span>
+        </span>
+      </span>
+    </span>
+  </span>
 </div>
 
-<div class="game-area">
-  <div class="enemies-container">
-  <% enemies.forEach(function(enemy, index) { %>
-    <div class="enemy-container" data-enemy-id="<%= enemy.id %>">
-      <div class="enemy-info">
-        <h2><%= enemy.name %> (Level - <%= enemy.level %>)</h2>
-      </div>
-      <div class="enemy-image">
-        <img src="<%= enemy.image %>" alt="<%= enemy.name %>">
-      </div>
-      <div class="enemy-stats">
-        <div class="enemy-stat">
-          <img src="/icons/main/hp.png" alt="HP">
-          <span><%= enemy.hp %></span>
+<div class="game-container">
+  <div class="game-area">
+    <div class="player-container">
+      <div class="player">
+        <div class="player-equipment-row">
+          <div class="player-equipment">
+            <span id="weapon"><%= weapon.name %></span>
+            <img src="/icons/weapons/<%= weapon.icon %>" alt="<%= weapon.name %>">
+          </div>
+          <div class="player-equipment">
+            <span id="shield"><%= shield.name %></span>
+            <img src="/icons/shields/<%= shield.icon %>" alt="<%= shield.name %>">
+          </div>
         </div>
-        <div class="enemy-stat">
+        
+        <div class="player-image">
+          <img src="/icons/main/player.png" alt="<%= player.name %>">
+        </div>
+      </div>
+
+      <div class="hp-bar">
+         <div class="hp-bar-fill" style="width: calc(<%= hp %> / <%= player.hp %> * 100%)"></div>
+         <span id="player-hp"><%= hp %>/<%= player.hp %></span>
+      </div>
+
+      <div class="weapon-stats">
+        <span class="weapon-stat">
           <img src="/icons/main/speed.png" alt="Attack Speed">
-          <span><%= enemy.speed %></span>
-        </div>
-        <div class="enemy-stat">
+          <span><%= weapon.speed %></span>
+        </span>
+        <span class="weapon-stat">
           <img src="/icons/main/hitsplat.png" alt="Max Hit">
-          <span><%= enemy.maxHit %></span>
-        </div>
-        <div class="enemy-stat">
-          <img src="/icons/main/<%= enemy.attackType %>.png" alt="<%= capitalizeFirstLetter(enemy.attackType) %>">
-        </div>
+          <span><%= maxHit %></span>
+        </span>
       </div>
     </div>
-  <% }) %>
-  </div>
 
-  <div class="divider"></div>
+    <div class="enemies-container">
 
-  <div class="deck-bar">
-    <div class="deck-grid">
-      <% deck.forEach(function(card) { %>
-      <div class="card" data-card-id="<%= card.id %>">
-        <div class="card-cost">
-          <span><%= weapon.speed + card.costModifier %></span>
-        </div>
-        <div class="card-header">
-          <span class="card-name"><%= card.name %></span>
-        </div>
-        <div class="card-image">
-          <img src="<%= card.image %>" alt="<%= card.name %>">
-        </div>
-        <div class="card-type">
-          <span><%= capitalizeFirstLetter(card.type) %></span>
-          <% if (card.type === 'attack') { %>
-            <span class="card-atk-details"><%= capitalizeFirstLetter(card.weaponStyle) %> <%= capitalizeFirstLetter(card.attackType) %></span>
-          <% } %>
-        </div>
-        <div class="card-text">
-          <p><%= card.text %></p>
-        </div>
-      </div>
-      <% }) %>
     </div>
   </div>
 </div>
+
+<div class="hand-area">
+
+</div>
+
+<!--
+
+<div class="equipment-item">
+  <img src="/icons/weapons/<%= weapon.icon %>" alt="<%= weapon.name %>">
+</div>
+<div class="equipment-item">
+  <img src="/icons/shields/<%= shield.icon %>" alt="<%= shield.name %>">
+</div>
+
+
+<div class="enemies-container">
+<% enemies.forEach(function(enemy, index) { %>
+  <div class="enemy-container" data-enemy-id="<%= enemy.id %>">
+    <div class="enemy-info">
+      <h2><%= enemy.name %> (Level - <%= enemy.level %>)</h2>
+    </div>
+    <div class="enemy-image">
+      <img src="<%= enemy.image %>" alt="<%= enemy.name %>">
+    </div>
+    <div class="enemy-stats">
+      <div class="enemy-stat">
+        <img src="/icons/main/hp.png" alt="HP">
+        <span><%= enemy.hp %></span>
+      </div>
+      <div class="enemy-stat">
+        <img src="/icons/main/speed.png" alt="Attack Speed">
+        <span><%= enemy.speed %></span>
+      </div>
+      <div class="enemy-stat">
+        <img src="/icons/main/hitsplat.png" alt="Max Hit">
+        <span><%= enemy.maxHit %></span>
+      </div>
+      <div class="enemy-stat">
+        <img src="/icons/main/<%= enemy.attackType %>.png" alt="<%= capitalizeFirstLetter(enemy.attackType) %>">
+      </div>
+    </div>
+  </div>
+<% }) %>
+</div>
+
+<div class="deck-bar">
+  <div class="deck-grid">
+    <% deck.forEach(function(card) { %>
+    <div class="card" data-card-id="<%= card.id %>">
+      <div class="card-cost">
+        <span><%= weapon.speed + card.costModifier %></span>
+      </div>
+      <div class="card-header">
+        <span class="card-name"><%= card.name %></span>
+      </div>
+      <div class="card-image">
+        <img src="<%= card.image %>" alt="<%= card.name %>">
+      </div>
+      <div class="card-type">
+        <span><%= capitalizeFirstLetter(card.type) %></span>
+        <% if (card.type === 'attack') { %>
+          <span class="card-atk-details"><%= capitalizeFirstLetter(card.weaponStyle) %> <%= capitalizeFirstLetter(card.attackType) %></span>
+        <% } %>
+      </div>
+      <div class="card-text">
+        <p><%= card.text %></p>
+      </div>
+    </div>
+    <% }) %>
+  </div>
+</div>
+-->
 
 <script src="/js/game.js"></script>
 <%- include('partials/footer.ejs'); %>
