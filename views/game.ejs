@@ -141,18 +141,17 @@
   </div>
 </div>
 
-<div class="floating-essence">
-  <div class="essence-info">
-    <span class="essence-count"><%= essence %>/12</span>
-  </div>
-</div>
-
 <div class="hand-area">
-  <div class="deck-info">
-    <img src="/icons/main/melee-deck.png" alt="Deck">
-    <span class="deck-count"><%= cards.deck.length %></span>
+  <div class="deck-section">
+    <div class="essence-info">
+      <span class="essence-count"><%= essence %>/12</span>
+    </div>
+    <div class="deck-info">
+      <img src="/icons/main/melee-deck.png" alt="Deck">
+      <span class="deck-count"><%= cards.deck.length %></span>
+    </div>
   </div>
-
+  
   <div class="hand-cards">
     <% cards.hand.forEach(function(card) { %>
       <div class="card-container">
@@ -174,15 +173,18 @@
     <% }) %>
   </div>
   
-  <div class="discard-info">
-    <img src="/icons/main/discard.png" alt="Discard Pile">
-    <span class="discard-count"><%= cards.discard.length %></span>
+  <div class="discard-section">
+    <div class="end-turn">
+      <button class="end-turn-button">End Turn</button>
+    </div>
+    <div class="discard-info">
+      <img src="/icons/main/discard.png" alt="Discard Pile">
+      <span class="discard-count"><%= cards.discard.length %></span>
+    </div>
   </div>
 </div>
 
-<div class="floating-end-turn">
-  <button class="end-turn-button">End Turn</button>
-</div>
+
 
 <script src="/js/game.js"></script>
 <%- include('partials/footer.ejs'); %>

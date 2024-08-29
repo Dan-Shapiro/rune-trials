@@ -184,9 +184,6 @@ h1 {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  position: relative;
-  width: 100%;
-  height: 100%;
 }
 
 .game-area {
@@ -362,6 +359,34 @@ h1 {
   border-top: 2px solid #444;
 }
 
+.deck-section,
+.discard-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.essence-info {
+  margin-bottom: 5px;
+  width: 60px;
+  height: 60px;
+  background-image: url('/icons/main/essence.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.essence-count {
+  font-family: 'RS-Bold-12', sans-serif;
+  font-weight: bold;
+  text-align: center;
+}
+
 .deck-info,
 .discard-info {
   display: flex;
@@ -373,8 +398,29 @@ h1 {
 
 .deck-info img,
 .discard-info img {
-  width: 75px;
+  width: 60px;
   height: auto;
+}
+
+.end-turn {
+  margin-bottom: 5px;
+}
+
+.end-turn-button {
+  padding: 15px 30px;
+  background-color: #d32f2f;
+  color: #ffff00;
+  font-family: 'RS-Bold-12', sans-serif;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  transition: background-color 0.3s ease;
+}
+
+.end-turn-button:hover {
+  background-color: #b71c1c;
 }
 
 .deck-count {
@@ -507,60 +553,4 @@ h1 {
   justify-content: center;
   align-items: center;
   box-sizing: border-box;
-}
-
-.floating-essence {
-  position: absolute;
-  left: 300px;
-  bottom: 240px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 75px;
-  height: 75px;
-}
-
-.essence-info {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  background-image: url('/icons/main/essence.png');
-  background-size: cover;
-  background-position: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 8px;
-}
-
-.essence-count {
-  position: absolute;
-  font-family: 'RS-Bold-12', sans-serif;
-  font-weight: bold;
-}
-
-.floating-end-turn {
-  position: absolute;
-  right: 300px;
-  bottom: 240px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.end-turn-button {
-  padding: 15px 30px;
-  background-color: #d32f2f;
-  color: #fff;
-  font-family: 'RS-Bold-12', sans-serif;
-  font-weight: bold;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-  transition: background-color 0.3s ease; 
-}
-
-.end-turn-button:hover {
-  background-color: #b71c1c;
 }
