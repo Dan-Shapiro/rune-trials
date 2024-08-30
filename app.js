@@ -50,31 +50,19 @@ app.get('/game', async (req, res) => {
   let deck = [];
   let hand = [];
   let discard = [];
-  let exile = [];
-
-  const cards = {
-    deck: deck,
-    hand: hand,
-    discard: discard,
-    exile: exile
-  }
-
+  const cards = { deck: deck, hand: hand, discard: discard }
   cards.deck.push(await Card.findOne({ where: { name: 'Pinpoint Stab' } }));
   cards.deck.push(await Card.findOne({ where: { name: 'Vicious Lunge' } }));
   cards.deck.push(await Card.findOne({ where: { name: 'Savage Slash' } }));
   cards.deck.push(await Card.findOne({ where: { name: 'Guarded Block' } }));
+  req.session.cards = cards;
 
   const enemies = []
   const goblin = await Enemy.findOne({ where: { name: 'Goblin' } });
   const hillGiant = await Enemy.findOne({ where: { name: 'Hill Giant' } });
-  enemies.push({
-    enemy: goblin,
-    hp: goblin.hp
-  });
-  enemies.push({
-    enemy: hillGiant,
-    hp: hillGiant.hp
-  });
+  enemies.push({ enemy: goblin, currHp: goblin.hp });
+  enemies.push({ enemy: hillGiant, currHp: hillGiant.hp });
+  req.session.enemies = enemies;
 
   shuffleDeck(cards.deck);
   const drawn = drawX(cards, 5);
@@ -86,36 +74,67 @@ app.get('/game', async (req, res) => {
     maxHit: req.session.maxHit,
     essence: req.session.essence,
     hp: req.session.hp,
-    cards,
-    enemies });
+    cards: req.session.cards,
+    enemies: req.session.enemies
+  });
 });
 
 app.post('/playCard', async (req, res) => {
   const { cardId, enemyId } = req.body;
 
-  if (!cardId || !enemyId) {
-    return res.status(400).json({ success: false, message: 'Card ID or Enemy ID is missing or undefined.' });
-  }
-
   const card = await Card.findOne({ where: { id: cardId } });
-  const enemy = await Enemy.findOne({ where: { id: enemyId } });
   const player = req.session.player;
   const weapon = req.session.weapon;
   const shield = req.session.shield;
+  const enemyData = req.session.enemies.find(e => e.enemy.id === parseInt(enemyId));
 
-  const damage = performAttack(player, enemy, weapon, shield, card.attackType, card.weaponStyle);
+  // check if enough essence
+  let status = 'success';
+  let damage = 0;
 
-  let message;
-  if (damage > 0) {
-    message = `Attack successful! Enemy took ${damage} damage.`;
+  if (card.costModifier + weapon.speed <= req.session.essence) {
+    // subtract essence cost
+    req.session.essence -= card.costModifier + weapon.speed;
+
+    // deal damage
+    damage += performAttack(player, enemyData.enemy, weapon, shield, card.attackType, card.weaponStyle);
+    enemyData.currHp = Math.max(0, enemyData.currHp - damage);
+
+    // remove enemy if defeated
+    if (enemyData.currHp <= 0) {
+      req.session.enemies = req.session.enemies.filter(e => e.enemy.id !== parseInt(enemyId));
+    }
+
+    // move card to discard
+    const cardIndex = req.session.cards.hand.findIndex(c => c.id === parseInt(cardId));
+    if (cardIndex !== -1) {
+      req.session.cards.discard.push(req.session.cards.hand.splice(cardIndex, 1)[0]);
+    }
   } else {
-    message = `Attack missed! WOMP WOMP`;
+    status = 'failure';
+
   }
 
+  res.json({ status: status, damage: damage, currHp: enemyData.currHp, isEnemyDefeated: enemyData.currHp <= 0, essenceCount: req.session.essence });
+});
+
+app.post('/endTurn', async (req, res) => {
+  // discard hand
+  req.session.cards.discard.push(...req.session.cards.hand);
+  req.session.cards.hand = [];
+
+  // draw 5 cards
+  const newHand = drawX(req.session.cards, 5);
+
+  // reset essence
+  req.session.essence = 12;
+
   res.json({
-    success: true,
-    message: message
-  });
+    newHand: req.session.cards.hand,
+    discardCount: req.session.cards.discard.length,
+    essenceCount: req.session.essence,
+    weapon: req.session.weapon
+  })
 });
 
 const PORT = process.env.PORT || 3000;

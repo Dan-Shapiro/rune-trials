@@ -118,8 +118,8 @@
           </div>
 
           <div class="enemy-hp-bar">
-            <div class="hp-bar-fill" style="width: calc(<%= enemyObj.hp %> / <%= enemyObj.enemy.hp %> * 100%);"></div>
-            <span class="enemy-hp"><%= enemyObj.hp %>/<%= enemyObj.enemy.hp %></span>
+            <div class="hp-bar-fill" style="width: calc(<%= enemyObj.currHp %> / <%= enemyObj.enemy.hp %> * 100%);"></div>
+            <span class="enemy-hp"><%= enemyObj.currHp %>/<%= enemyObj.enemy.hp %></span>
           </div>
 
           <div class="enemy-stat-row">
@@ -135,6 +135,8 @@
               <span><%= enemyObj.enemy.maxHit %></span>
             </span>
           </div>
+
+          <div class="enemy-hitsplat-container"></div>
         </div>
       <% }) %>
     </div>
