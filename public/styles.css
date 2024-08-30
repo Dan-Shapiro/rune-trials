@@ -208,6 +208,13 @@ h1 {
 .player-container {
   width: 300px;
   margin-right: 20px;
+  position: relative;
+}
+
+.player-container.highlight {
+  border: 3px solid #ffff00;
+  box-shadow: 0 0 10px rgba(255, 255, 0, 0.8);
+  transition: border 0.2s ease, box-shadow 0.2s ease;
 }
 
 .player,
@@ -341,6 +348,12 @@ h1 {
   position: relative;
 }
 
+.enemy-container.highlight {
+  border: 3px solid #ffff00;
+  box-shadow: 0 0 10px rgba(255, 255, 0, 0.8);
+  transition: border 0.2s ease, box-shadow 0.2s ease;
+}
+
 .enemy-image img {
   width: 100px;
 }
@@ -350,10 +363,11 @@ h1 {
   max-width: 180px;
 }
 
-.enemy-hitsplat-container {
+.enemy-hitsplat-container,
+.player-hitsplat-container {
   position: absolute;
   width: 100%;
-  height: 100%;
+  height: 100px;
   top: 50%;
   left: 50%;
   transform: translateX(-50%);
@@ -361,7 +375,8 @@ h1 {
   pointer-events: none;
 }
 
-.enemy-hitsplat {
+.enemy-hitsplat,
+.player-hitsplat {
   position: absolute;
   top: -20px;
   left: 50%;

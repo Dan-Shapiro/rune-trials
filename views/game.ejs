@@ -69,7 +69,7 @@
 
 <div class="game-container">
   <div class="game-area">
-    <div class="player-container sprite-container">
+    <div class="player-container sprite-container highlight">
       <div class="player">
         <div class="player-equipment-row">
           <div class="player-equipment">
@@ -102,6 +102,8 @@
           <span><%= maxHit %></span>
         </span>
       </div>
+
+      <div class="player-hitsplat-container"></div>
     </div>
 
     <div class="enemies-container">
@@ -124,6 +126,10 @@
 
           <div class="enemy-stat-row">
             <span class="enemy-stat">
+              <img src="/icons/main/essence.png" alt="Enemy essence">
+              <span class="enemy-essence"><%= 12 + enemyObj.essenceRemainder %></span>
+            </span>
+            <span class="enemy-stat">
               <img src="/icons/main/<%= enemyObj.enemy.attackType %>.png" alt="<%= capitalizeFirstLetter(enemyObj.enemy.attackType) %>">
             </span>
             <span class="enemy-stat">
@@ -132,7 +138,7 @@
             </span>
             <span class="enemy-stat">
               <img src="/icons/main/hitsplat.png" alt="Max Hit">
-              <span><%= enemyObj.enemy.maxHit %></span>
+              <span><%= enemyObj.maxHit %></span>
             </span>
           </div>
 

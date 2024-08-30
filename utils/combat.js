@@ -11,7 +11,20 @@ function calcMaxHit(player, weapon, shield, stance='accurate') {
   }
 
   let effStr = player.strengthLevel + stanceBonus + 8;
-  let eqBonus = weapon.strengthBonus + shield.strengthBonus || 0;
+  let eqBonus = 0;
+  // players have weapon+shield bonus
+  if (weapon) {
+    eqBonus += weapon.strengthBonus;
+  }
+  if (shield) {
+    eqBonus += shield.strengthBonus;
+  }
+
+  // enemies have built in strength bonus
+  if (player.strengthBonus) {
+    eqBonus += player.strengthBonus;
+  }
+
   return Math.floor((effStr * (eqBonus + 64) + 320) / 640);
 }
 
@@ -25,12 +38,30 @@ function calcAtkRoll(player, weapon, shield, style='stab', stance='accurate') {
 
   let effAtk = player.attackLevel + stanceBonus + 8
   let eqBonus = 0;
-  if (style === 'stab') {
-    eqBonus += weapon.stabAttack + shield.stabAttack || 0;
-  } else if (style === 'slash') {
-    eqBonus += weapon.slashAttack + shield.slashAttack || 0;
-  } else if (style === 'crush') {
-    eqBonus += weapon.crushAttack + shield.crushAttack || 0;
+
+  // players have weapon+shield bonus
+  if (weapon) {
+    if (style === 'stab') {
+      eqBonus += weapon.stabAttack;
+    } else if (style === 'slash') {
+      eqBonus += weapon.slashAttack;
+    } else if (style === 'crush') {
+      eqBonus += weapon.crushAttack;
+    }
+  }
+  if (shield) {
+    if (style === 'stab') {
+      eqBonus += shield.stabAttack;
+    } else if (style === 'slash') {
+      eqBonus += shield.slashAttack;
+    } else if (style === 'crush') {
+      eqBonus += shield.crushAttack;
+    }
+  }
+
+  // enemies have attack bonus
+  if (player.attackBonus) {
+    eqBonus += player.attackBonus;
   }
 
   return effAtk * (eqBonus + 64);
@@ -46,13 +77,39 @@ function calcDefRoll(player, weapon, shield, style='stab', stance='accurate') {
 
   let effDef = player.defenceLevel + stanceBonus + 8
   let eqBonus = 0;
-  if (weapon && shield) {
+
+  // players have weapon+shield bonus
+  if (weapon) {
     if (style === 'stab') {
-      eqBonus += weapon.stabDefence + shield.stabDefence || 0;
+      eqBonus += weapon.stabDefence;
     } else if (style === 'slash') {
-      eqBonus += weapon.slashDefence + shield.slashDefence || 0;
+      eqBonus += weapon.slashDefence;
     } else if (style === 'crush') {
-      eqBonus += weapon.crushDefence + shield.crushDefence || 0;
+      eqBonus += weapon.crushDefence;
+    }
+  }
+  if (shield) {
+    if (style === 'stab') {
+      eqBonus += shield.stabDefence;
+    } else if (style === 'slash') {
+      eqBonus += shield.slashDefence;
+    } else if (style === 'crush') {
+      eqBonus += shield.crushDefence;
+    }
+  }
+
+  // enemies have defence bonus
+  if (style === 'stab') {
+    if (player.stabDefence) {
+      eqBonus += player.stabDefence;
+    }
+  } else if (style === 'slash') {
+    if (player.slashDefence) {
+      eqBonus += player.slashDefence;
+    }
+  } else if (style === 'crush') {
+    if (player.crushDefence) {
+      eqBonus += player.crushDefence;
     }
   }
   

@@ -68,8 +68,8 @@ app.get('/game', async (req, res) => {
   const enemies = []
   const goblin = await Enemy.findOne({ where: { name: 'Goblin' } });
   const hillGiant = await Enemy.findOne({ where: { name: 'Hill Giant' } });
-  enemies.push({ enemy: goblin, currHp: goblin.hp });
-  enemies.push({ enemy: hillGiant, currHp: hillGiant.hp });
+  enemies.push({ enemy: goblin, currHp: goblin.hp, maxHit: calcMaxHit(goblin, null, null, 'crush'), essenceRemainder: 0 });
+  enemies.push({ enemy: hillGiant, currHp: hillGiant.hp, maxHit: calcMaxHit(hillGiant, null, null, 'crush'), essenceRemainder: 0 });
   req.session.enemies = enemies;
 
   shuffleDeck(cards.deck);
@@ -127,24 +127,62 @@ app.post('/playCard', async (req, res) => {
 });
 
 app.post('/endTurn', async (req, res) => {
-  // discard hand
+  const player = req.session.player;
+  const enemies = req.session.enemies;
+  let playerHp = req.session.hp;
+
+  // 1- discard hand
   req.session.cards.discard.push(...req.session.cards.hand);
   req.session.cards.hand = [];
 
-  // draw 5 cards
+  // 2- enemies attack player
+  const enemyAttacks = [];
+  enemies.forEach(enemyObj => {
+    const enemy = enemyObj.enemy;
+    const speed = enemy.speed;
+    let attacksThisTurn = Math.floor((12 + enemyObj.essenceRemainder) / speed);
+    enemyObj.essenceRemainder = (12 + enemyObj.essenceRemainder) % speed;
+
+    for (let i = 0; i < attacksThisTurn; i++) {
+      const damage = performAttack(enemy, player, null, null, enemy.attackType, 'controlled');
+      playerHp = Math.max(0, playerHp - damage);
+
+      const essenceUsed = (i+1) * speed;
+      const remainingEssence = 12 + enemyObj.essenceRemainder - essenceUsed;
+
+      enemyAttacks.push({
+        enemyId: enemy.id,
+        damage: damage,
+        playerHp: playerHp,
+        essenceRemaining: remainingEssence,
+        speed: speed
+      });
+
+      if (playerHp <= 0) {
+        break;
+      }
+    }
+  });
+
+  req.session.hp = playerHp;
+
+  // 3- reset essence
+  req.session.essence = 12;
+
+  // 4- draw 5 cards
   const newHand = drawX(req.session.cards, 5);
   req.session.cards.hand = newHand;
 
-  // reset essence
-  req.session.essence = 12;
-
   res.json({
+    enemyAttacks: enemyAttacks,
     newHand: req.session.cards.hand,
     deckCount: req.session.cards.deck.length,
     discardCount: req.session.cards.discard.length,
     essenceCount: req.session.essence,
-    weapon: req.session.weapon
-  })
+    weapon: req.session.weapon,
+    playerHp: req.session.hp,
+    enemies: req.session.enemies
+  });
 });
 
 const PORT = process.env.PORT || 3000;
