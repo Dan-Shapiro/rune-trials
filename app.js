@@ -52,9 +52,17 @@ app.get('/game', async (req, res) => {
   let discard = [];
   const cards = { deck: deck, hand: hand, discard: discard }
   cards.deck.push(await Card.findOne({ where: { name: 'Pinpoint Stab' } }));
+  cards.deck.push(await Card.findOne({ where: { name: 'Piercing Jab' } }));
+  cards.deck.push(await Card.findOne({ where: { name: 'Rapid Stab' } }));
   cards.deck.push(await Card.findOne({ where: { name: 'Vicious Lunge' } }));
+  cards.deck.push(await Card.findOne({ where: { name: 'Lunging Strike' } }));
+  cards.deck.push(await Card.findOne({ where: { name: 'Ferocious Lunge' } }));
   cards.deck.push(await Card.findOne({ where: { name: 'Savage Slash' } }));
-  cards.deck.push(await Card.findOne({ where: { name: 'Guarded Block' } }));
+  cards.deck.push(await Card.findOne({ where: { name: 'Brutal Slash' } }));
+  cards.deck.push(await Card.findOne({ where: { name: 'Cleave' } }));
+  cards.deck.push(await Card.findOne({ where: { name: 'Fortified Poke' } }));
+  cards.deck.push(await Card.findOne({ where: { name: 'Defensive Thurst' } }));
+  cards.deck.push(await Card.findOne({ where: { name: 'Guarded Jab' } }));
   req.session.cards = cards;
 
   const enemies = []

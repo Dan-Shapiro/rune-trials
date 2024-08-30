@@ -51,7 +51,29 @@ async function seed() {
     const pinpointStab = await Card.create({
       name: 'Pinpoint Stab',
       costModifier: 0,
-      text: 'A precise stab with enhanced accuracy.',
+      text: '+3 accuracy',
+      image: '/icons/attacks/stab.png',
+      function: 'accurateStab',
+      type: 'attack',
+      attackType: 'stab',
+      weaponStyle: 'accurate'
+    });
+
+    const piercingJab = await Card.create({
+      name: 'Piercing Jab',
+      costModifier: 0,
+      text: '+3 accuracy',
+      image: '/icons/attacks/stab.png',
+      function: 'accurateStab',
+      type: 'attack',
+      attackType: 'stab',
+      weaponStyle: 'accurate'
+    });
+
+    const rapidStab = await Card.create({
+      name: 'Rapid Stab',
+      costModifier: 0,
+      text: '+3 accuracy',
       image: '/icons/attacks/stab.png',
       function: 'accurateStab',
       type: 'attack',
@@ -61,8 +83,30 @@ async function seed() {
   
     const viciousLunge = await Card.create({
       name: 'Vicious Lunge',
-      costModifier: 1,
-      text: 'A forceful lunge that sacrifices accuracy for increased damage.',
+      costModifier: 0,
+      text: '+3 strength',
+      image: '/icons/attacks/lunge.png',
+      function: 'aggressiveStab',
+      type: 'attack',
+      attackType: 'stab',
+      weaponStyle: 'aggressive'
+    });
+
+    const lungingStrike = await Card.create({
+      name: 'Lunging Strike',
+      costModifier: 0,
+      text: '+3 strength',
+      image: '/icons/attacks/lunge.png',
+      function: 'aggressiveStab',
+      type: 'attack',
+      attackType: 'stab',
+      weaponStyle: 'aggressive'
+    });
+
+    const ferociousLunge = await Card.create({
+      name: 'Ferocious Lunge',
+      costModifier: 0,
+      text: '+3 strength',
       image: '/icons/attacks/lunge.png',
       function: 'aggressiveStab',
       type: 'attack',
@@ -72,8 +116,30 @@ async function seed() {
   
     const savageSlash = await Card.create({
       name: 'Savage Slash',
-      costModifier: 2,
-      text: 'A powerful slash attack with a reckless approach.',
+      costModifier: 0,
+      text: '+3 strength',
+      image: '/icons/attacks/slash.png',
+      function: 'aggressiveSlash',
+      type: 'attack',
+      attackType: 'slash',
+      weaponStyle: 'aggressive'
+    });
+
+    const brutalSlash = await Card.create({
+      name: 'Brutal Slash',
+      costModifier: 0,
+      text: '+3 strength',
+      image: '/icons/attacks/slash.png',
+      function: 'aggressiveSlash',
+      type: 'attack',
+      attackType: 'slash',
+      weaponStyle: 'aggressive'
+    });
+
+    const cleave = await Card.create({
+      name: 'Cleave',
+      costModifier: 0,
+      text: '+3 strength',
       image: '/icons/attacks/slash.png',
       function: 'aggressiveSlash',
       type: 'attack',
@@ -82,9 +148,31 @@ async function seed() {
     });
   
     const guardedBlock = await Card.create({
-      name: 'Guarded Block',
+      name: 'Fortified Poke',
       costModifier: 0,
-      text: 'A cautious block that balances offense and defence.',
+      text: '+3 defence',
+      image: '/icons/attacks/block.png',
+      function: 'defensiveStab',
+      type: 'attack',
+      attackType: 'stab',
+      weaponStyle: 'defensive'
+    });
+
+    const defensiveThrust = await Card.create({
+      name: 'Defensive Thrust',
+      costModifier: 0,
+      text: '+3 defence',
+      image: '/icons/attacks/block.png',
+      function: 'defensiveStab',
+      type: 'attack',
+      attackType: 'stab',
+      weaponStyle: 'defensive'
+    });
+
+    const guardedJab = await Card.create({
+      name: 'Guarded Jab',
+      costModifier: 0,
+      text: '+3 defence',
       image: '/icons/attacks/block.png',
       function: 'defensiveStab',
       type: 'attack',
