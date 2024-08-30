@@ -61,7 +61,7 @@ app.get('/game', async (req, res) => {
   cards.deck.push(await Card.findOne({ where: { name: 'Brutal Slash' } }));
   cards.deck.push(await Card.findOne({ where: { name: 'Cleave' } }));
   cards.deck.push(await Card.findOne({ where: { name: 'Fortified Poke' } }));
-  cards.deck.push(await Card.findOne({ where: { name: 'Defensive Thurst' } }));
+  cards.deck.push(await Card.findOne({ where: { name: 'Steel Point' } }));
   cards.deck.push(await Card.findOne({ where: { name: 'Guarded Jab' } }));
   req.session.cards = cards;
 
@@ -73,7 +73,7 @@ app.get('/game', async (req, res) => {
   req.session.enemies = enemies;
 
   shuffleDeck(cards.deck);
-  const drawn = drawX(cards, 5);
+  drawX(cards, 5);
 
   res.render('game', {
     player: req.session.player,
@@ -133,12 +133,14 @@ app.post('/endTurn', async (req, res) => {
 
   // draw 5 cards
   const newHand = drawX(req.session.cards, 5);
+  req.session.cards.hand = newHand;
 
   // reset essence
   req.session.essence = 12;
 
   res.json({
     newHand: req.session.cards.hand,
+    deckCount: req.session.cards.deck.length,
     discardCount: req.session.cards.discard.length,
     essenceCount: req.session.essence,
     weapon: req.session.weapon

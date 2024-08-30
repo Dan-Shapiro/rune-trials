@@ -10,18 +10,21 @@ function shuffleDeck(deck) {
 function drawX(cards, num) {
   let drawnCards = [];
 
-  // deck is out of cards
   for (let i = 0; i < num; i++) {
-    // end if no cards in discard either
+    // check if draw pile is empty
     if (cards.deck.length === 0) {
+      // check if discard pile is empty
       if (cards.discard.length === 0) {
+        // no cards to draw
         break;
       }
+
       // shuffle discard into deck
       cards.deck = [...cards.discard];
       cards.discard = [];
       shuffleDeck(cards.deck);
     }
+
     // draw a card
     const card = cards.deck.pop();
     drawnCards.push(card);

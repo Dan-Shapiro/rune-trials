@@ -158,8 +158,8 @@ async function seed() {
       weaponStyle: 'defensive'
     });
 
-    const defensiveThrust = await Card.create({
-      name: 'Defensive Thrust',
+    const steelPoint = await Card.create({
+      name: 'Steel Point',
       costModifier: 0,
       text: '+3 defence',
       image: '/icons/attacks/block.png',

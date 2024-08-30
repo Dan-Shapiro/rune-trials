@@ -140,6 +140,7 @@ function endTurn() {
     const handCardsContainer = document.querySelector('.hand-cards');
     handCardsContainer.innerHTML = '';
 
+    console.log('New hand data:', data.newHand);
     data.newHand.forEach(card => {
       const cardContainer = document.createElement('div');
       cardContainer.classList.add('card-container');
@@ -173,6 +174,9 @@ function endTurn() {
         }
       });
     });
+
+    const handCountElement = document.querySelector('.deck-count');
+    handCountElement.textContent = data.deckCount;
 
     const discardCountElement = document.querySelector('.discard-count');
     discardCountElement.textContent = data.discardCount;
