@@ -3,8 +3,6 @@ const path = require('path');
 const session = require('express-session');
 
 const sequelize = require('./config/database');
-const {calcMaxHit, calcCost, performAttack } = require('./utils/combat');
-const { shuffleDeck, drawX } = require('./utils/deck');
 
 const Player = require('./models/player');
 const Weapon = require('./models/weapon');
@@ -12,22 +10,22 @@ const Shield = require('./models/shield');
 const Card = require('./models/card');
 const Enemy = require('./models/enemy');
 
+const apiRoutes = require('./routes/api');
+const { initializePlayer } = require('./controllers/playerController');
+const { initializeEnemies } = require('./controllers/enemyController');
+const { shuffleDeck, drawX } = require('./utils/deck');
+
+// initialize app
 const app = express();
 
+// set view engine
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
+// middleware setup
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-
-app.use((req, res, next) => {
-  res.locals.capitalizeFirstLetter = function(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  };
-  next();
-});
-
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
@@ -35,156 +33,63 @@ app.use(session({
   cookie: { secure: false }
 }));
 
+app.locals.capitalize = function(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+};
+
+// API routes
+app.use('/api', apiRoutes);
+
+// routes
 app.get('/', (req, res) => {
   res.render('index');
 });
 
 app.get('/game', async (req, res) => {
-  req.session.player = await Player.findOne({ where: { name: 'Shappy' } });
-  req.session.weapon = await Weapon.findOne({ where: { name: 'Bronze sword' } });
-  req.session.shield = await Shield.findOne({ where: { name: 'Wooden shield' } });
-  req.session.maxHit = calcMaxHit(req.session.player, req.session.weapon, req.session.shield);
-  req.session.essence = 12;
-  req.session.hp = req.session.player.hp;
+  try {
+    // initialize player state
+    await initializePlayer(req);
 
-  let deck = [];
-  let hand = [];
-  let discard = [];
-  const cards = { deck: deck, hand: hand, discard: discard }
-  cards.deck.push(await Card.findOne({ where: { name: 'Pinpoint Stab' } }));
-  cards.deck.push(await Card.findOne({ where: { name: 'Piercing Jab' } }));
-  cards.deck.push(await Card.findOne({ where: { name: 'Rapid Stab' } }));
-  cards.deck.push(await Card.findOne({ where: { name: 'Vicious Lunge' } }));
-  cards.deck.push(await Card.findOne({ where: { name: 'Lunging Strike' } }));
-  cards.deck.push(await Card.findOne({ where: { name: 'Ferocious Lunge' } }));
-  cards.deck.push(await Card.findOne({ where: { name: 'Savage Slash' } }));
-  cards.deck.push(await Card.findOne({ where: { name: 'Brutal Slash' } }));
-  cards.deck.push(await Card.findOne({ where: { name: 'Cleave' } }));
-  cards.deck.push(await Card.findOne({ where: { name: 'Fortified Poke' } }));
-  cards.deck.push(await Card.findOne({ where: { name: 'Steel Point' } }));
-  cards.deck.push(await Card.findOne({ where: { name: 'Guarded Jab' } }));
-  req.session.cards = cards;
+    // initialize deck
+    let deck = [];
+    let hand = [];
+    let discard = [];
+    const cards = { deck, hand, discard }
+    const cardNames = [
+      'Pinpoint Stab', 'Piercing Jab', 'Rapid Stab', 'Vicious Lunge', 
+      'Lunging Strike', 'Ferocious Lunge', 'Savage Slash', 'Brutal Slash',
+      'Cleave', 'Fortified Poke', 'Steel Point', 'Guarded Jab'
+    ];
 
-  const enemies = []
-  const goblin = await Enemy.findOne({ where: { name: 'Goblin' } });
-  const hillGiant = await Enemy.findOne({ where: { name: 'Hill Giant' } });
-  enemies.push({ enemy: goblin, currHp: goblin.hp, maxHit: calcMaxHit(goblin, null, null, 'crush'), essenceRemainder: 0 });
-  enemies.push({ enemy: hillGiant, currHp: hillGiant.hp, maxHit: calcMaxHit(hillGiant, null, null, 'crush'), essenceRemainder: 0 });
-  req.session.enemies = enemies;
-
-  shuffleDeck(cards.deck);
-  drawX(cards, 5);
-
-  res.render('game', {
-    player: req.session.player,
-    weapon: req.session.weapon,
-    shield: req.session.shield,
-    maxHit: req.session.maxHit,
-    essence: req.session.essence,
-    hp: req.session.hp,
-    cards: req.session.cards,
-    enemies: req.session.enemies
-  });
-});
-
-app.post('/playCard', async (req, res) => {
-  const { cardId, enemyId } = req.body;
-
-  const card = await Card.findOne({ where: { id: cardId } });
-  const player = req.session.player;
-  const weapon = req.session.weapon;
-  const shield = req.session.shield;
-  const enemyData = req.session.enemies.find(e => e.enemy.id === parseInt(enemyId));
-
-  // check if enough essence
-  let status = 'success';
-  let damage = 0;
-
-  if (card.costModifier + weapon.speed <= req.session.essence) {
-    // subtract essence cost
-    req.session.essence -= card.costModifier + weapon.speed;
-
-    // deal damage
-    damage += performAttack(player, enemyData.enemy, weapon, shield, card.attackType, card.weaponStyle);
-    enemyData.currHp = Math.max(0, enemyData.currHp - damage);
-
-    // remove enemy if defeated
-    if (enemyData.currHp <= 0) {
-      req.session.enemies = req.session.enemies.filter(e => e.enemy.id !== parseInt(enemyId));
+    for (const name of cardNames) {
+      const card = await Card.findOne({ where: { name } });
+      if (!card) throw new Error(`Card not found: ${name}`);
+      cards.deck.push(card);
     }
 
-    // move card to discard
-    const cardIndex = req.session.cards.hand.findIndex(c => c.id === parseInt(cardId));
-    if (cardIndex !== -1) {
-      req.session.cards.discard.push(req.session.cards.hand.splice(cardIndex, 1)[0]);
-    }
-  } else {
-    status = 'failure';
+    req.session.cards = cards;
+    shuffleDeck(cards.deck);
+    drawX(cards, 5);
 
+    // initialize enemies
+    await initializeEnemies(req);
+
+    res.render('game', {
+      player: req.session.player,
+      weapon: req.session.weapon,
+      shield: req.session.shield,
+      maxHit: req.session.maxHit,
+      cooldown: req.session.cooldown,
+      hp: req.session.hp,
+      cards: req.session.cards,
+      enemies: req.session.enemies
+    });
+  } catch (error) {
+    res.status(500).send('Error initializing game: ' + error.message);
   }
-
-  res.json({ status: status, damage: damage, currHp: enemyData.currHp, isEnemyDefeated: enemyData.currHp <= 0, essenceCount: req.session.essence });
 });
 
-app.post('/endTurn', async (req, res) => {
-  const player = req.session.player;
-  const enemies = req.session.enemies;
-  let playerHp = req.session.hp;
-
-  // 1- discard hand
-  req.session.cards.discard.push(...req.session.cards.hand);
-  req.session.cards.hand = [];
-
-  // 2- enemies attack player
-  const enemyAttacks = [];
-  enemies.forEach(enemyObj => {
-    const enemy = enemyObj.enemy;
-    const speed = enemy.speed;
-    let attacksThisTurn = Math.floor((12 + enemyObj.essenceRemainder) / speed);
-    enemyObj.essenceRemainder = (12 + enemyObj.essenceRemainder) % speed;
-
-    for (let i = 0; i < attacksThisTurn; i++) {
-      const damage = performAttack(enemy, player, null, null, enemy.attackType, 'controlled');
-      playerHp = Math.max(0, playerHp - damage);
-
-      const essenceUsed = (i+1) * speed;
-      const remainingEssence = 12 + enemyObj.essenceRemainder - essenceUsed;
-
-      enemyAttacks.push({
-        enemyId: enemy.id,
-        damage: damage,
-        playerHp: playerHp,
-        essenceRemaining: remainingEssence,
-        speed: speed
-      });
-
-      if (playerHp <= 0) {
-        break;
-      }
-    }
-  });
-
-  req.session.hp = playerHp;
-
-  // 3- reset essence
-  req.session.essence = 12;
-
-  // 4- draw 5 cards
-  const newHand = drawX(req.session.cards, 5);
-  req.session.cards.hand = newHand;
-
-  res.json({
-    enemyAttacks: enemyAttacks,
-    newHand: req.session.cards.hand,
-    deckCount: req.session.cards.deck.length,
-    discardCount: req.session.cards.discard.length,
-    essenceCount: req.session.essence,
-    weapon: req.session.weapon,
-    playerHp: req.session.hp,
-    enemies: req.session.enemies
-  });
-});
-
+// start the server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

@@ -126,11 +126,11 @@
 
           <div class="enemy-stat-row">
             <span class="enemy-stat">
-              <img src="/icons/main/essence.png" alt="Enemy essence">
-              <span class="enemy-essence"><%= 12 + enemyObj.essenceRemainder %></span>
+              <img src="/icons/main/essence.png" alt="Enemy cooldown">
+              <span class="enemy-cooldown"><%= enemyObj.cooldown %></span>
             </span>
             <span class="enemy-stat">
-              <img src="/icons/main/<%= enemyObj.enemy.attackType %>.png" alt="<%= capitalizeFirstLetter(enemyObj.enemy.attackType) %>">
+              <img src="/icons/main/<%= enemyObj.enemy.attackType %>.png" alt="<%= capitalize(enemyObj.enemy.attackType) %>">
             </span>
             <span class="enemy-stat">
               <img src="/icons/main/speed.png" alt="Attack Speed">
@@ -151,8 +151,8 @@
 
 <div class="hand-area">
   <div class="deck-section">
-    <div class="essence-info">
-      <span class="essence-count"><%= essence %>/12</span>
+    <div class="cooldown-info">
+      <span class="cooldown"><%= cooldown %></span>
     </div>
     <div class="deck-info">
       <img src="/icons/main/melee-deck.png" alt="Deck">
@@ -170,9 +170,9 @@
             <img src="<%= card.image %>" alt="<%= card.name %>">
           </div>
           <div class="card-type">
-            <%= capitalizeFirstLetter(card.type) %>
+            <%= capitalize(card.type) %>
             <% if (card.type === 'attack') { %>
-              <div><%= capitalizeFirstLetter(card.weaponStyle) %> <%= capitalizeFirstLetter(card.attackType) %></div>
+              <div><%= capitalize(card.weaponStyle) %> <%= capitalize(card.attackType) %></div>
             <% } %>
           </div>
           <div class="card-text"><%= card.text %></div>

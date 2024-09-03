@@ -1,34 +1,34 @@
 @font-face {
   font-family: 'RS-Plain-12';
-  src: url('./fonts/plain-12.ttf') format('truetype');
+  src: url('../fonts/plain-12.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'RS-Plain-11';
-  src: url('./fonts/plain-11.ttf') format('truetype');
+  src: url('../fonts/plain-11.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'RS-Quill';
-  src: url('./fonts/quill.ttf') format('truetype');
+  src: url('../fonts/quill.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'RS-Quill-8';
-  src: url('./fonts/quill-8.ttf') format('truetype');
+  src: url('../fonts/quill-8.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'RS-Bold-12';
-  src: url('./fonts/bold-12.ttf') format('truetype');
+  src: url('../fonts/bold-12.ttf') format('truetype');
   font-weight: bold;
   font-style: normal;
 }
@@ -412,7 +412,7 @@ h1 {
   position: relative;
 }
 
-.essence-info {
+.cooldown-info {
   margin-bottom: 5px;
   width: 60px;
   height: 60px;
@@ -426,7 +426,7 @@ h1 {
   justify-content: center;
 }
 
-.essence-count {
+.cooldown {
   font-family: 'RS-Bold-12', sans-serif;
   font-weight: bold;
   text-align: center;
