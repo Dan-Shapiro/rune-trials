@@ -10,10 +10,11 @@ const Shield = require('./models/shield');
 const Card = require('./models/card');
 const Enemy = require('./models/enemy');
 
+const playerController = require('./controllers/playerController');
+const enemyController = require('./controllers/enemyController');
+const deckController = require('./controllers/deckController');
+
 const apiRoutes = require('./routes/api');
-const { initializePlayer } = require('./controllers/playerController');
-const { initializeEnemies } = require('./controllers/enemyController');
-const { shuffleDeck, drawX } = require('./utils/deck');
 
 // initialize app
 const app = express();
@@ -47,32 +48,20 @@ app.get('/', (req, res) => {
 
 app.get('/game', async (req, res) => {
   try {
-    // initialize player state
-    await initializePlayer(req);
+    // initialize player
+    await playerController.initializePlayer(req);
 
     // initialize deck
-    let deck = [];
-    let hand = [];
-    let discard = [];
-    const cards = { deck, hand, discard }
-    const cardNames = [
-      'Pinpoint Stab', 'Piercing Jab', 'Rapid Stab', 'Vicious Lunge', 
-      'Lunging Strike', 'Ferocious Lunge', 'Savage Slash', 'Brutal Slash',
-      'Cleave', 'Fortified Poke', 'Steel Point', 'Guarded Jab'
-    ];
+    await deckController.initializeDeck(req);
 
-    for (const name of cardNames) {
-      const card = await Card.findOne({ where: { name } });
-      if (!card) throw new Error(`Card not found: ${name}`);
-      cards.deck.push(card);
-    }
+    // shuffle deck
+    deckController.shuffle(req.session.cards.deck);
 
-    req.session.cards = cards;
-    shuffleDeck(cards.deck);
-    drawX(cards, 5);
+    // draw 5 cards
+    deckController.drawCards(req.session.cards, 5);
 
     // initialize enemies
-    await initializeEnemies(req);
+    await enemyController.initializeEnemies(req);
 
     res.render('game', {
       player: req.session.player,

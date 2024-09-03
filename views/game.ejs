@@ -95,7 +95,7 @@
       <div class="weapon-stat-row">
         <span class="weapon-stat">
           <img src="/icons/main/speed.png" alt="Attack Speed">
-          <span><%= weapon.speed %></span>
+          <span id="weapon-speed"><%= weapon.speed %></span>
         </span>
         <span class="weapon-stat">
           <img src="/icons/main/hitsplat.png" alt="Max Hit">
@@ -158,6 +158,10 @@
       <img src="/icons/main/melee-deck.png" alt="Deck">
       <span class="deck-count"><%= cards.deck.length %></span>
     </div>
+  </div>
+
+  <div class="draw-card">
+    <button id="draw-card-button" class="draw-card-button">Draw a Card</button>
   </div>
   
   <div class="hand-cards">
