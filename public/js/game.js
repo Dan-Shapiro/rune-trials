@@ -49,10 +49,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // start the first turn when screen loads 
-  startTurn();
+  // end turn button listener
+  document.querySelector('.end-turn-button').addEventListener('click', endTurn);
 
-  //document.querySelector('.end-turn-button').addEventListener('click', endTurn);
+  // start combat when screen loads 
+  startCombat();
 });
 
 // helper functions
@@ -179,6 +180,13 @@ function removeEnemy(enemyId) {
   }, 1200);
 }
 
+function checkIfAllEnemiesDefeated() {
+  const remainingEnemies = document.querySelectorAll('.enemy-container');
+  if (remainingEnemies.length === 0) {
+    alert('You are a winner!');
+  }
+}
+
 function removeCardFromHand(cardId) {
   const cardElement = document.querySelector(`[data-card-id="${cardId}"]`);
   const cardContainer = cardElement.parentElement;
@@ -188,7 +196,7 @@ function removeCardFromHand(cardId) {
   }, 600);
 }
 
-function startTurn() {
+function startCombat() {
   // draw 5 cards
   fetch('/api/deck/draw', {
     method: 'POST',
@@ -206,6 +214,27 @@ function startTurn() {
   .catch(error => {
     console.error('Error starting turn:', error);
   });
+}
+
+function startTurn() {
+  fetch('/api/start-turn', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      // update player cooldown
+      document.getElementById('player-cooldown').textContent = data.cooldown;
+    } else {
+      alert(data.message);
+    }
+  })
+  .catch(error => {
+    console.error('Error starting turn:', error);
+  })
 }
 
 function playCard(cardId, enemyId) {
@@ -248,4 +277,8 @@ function playCard(cardId, enemyId) {
   .catch(error => {
     console.error('Error playing card:', error);
   })
+}
+
+function endTurn() {
+  startTurn();
 }

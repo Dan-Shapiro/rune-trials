@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const deckController = require('../../controllers/deckController');
-const playerController = require('../../controllers/playerController');
 const enemyController = require('../../controllers/enemyController');
 const combatUtils = require('../../utils/combat');
 
@@ -48,7 +47,7 @@ router.post('/play-card', (req, res) => {
     res.json({
       success: true,
       newCooldown: req.session.cooldown,
-      newEnemyHp: enemy.hp,
+      newEnemyHp: Math.max(enemy.hp, 0),
       enemyMaxHp: enemy.enemy.hp,
       isEnemyDefeated: enemy.hp <= 0,
       damage: damage,

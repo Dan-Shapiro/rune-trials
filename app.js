@@ -16,6 +16,7 @@ const deckController = require('./controllers/deckController');
 
 const apiRoutes = require('./routes/api');
 const playRoutes = require('./routes/api/play');
+const startTurnRoutes = require('./routes/api/startTurn');
 
 // initialize app
 const app = express();
@@ -42,6 +43,7 @@ app.locals.capitalize = function(str) {
 // API routes
 app.use('/api', apiRoutes);
 app.use('/api', playRoutes);
+app.use('/api', startTurnRoutes);
 
 // routes
 app.get('/', (req, res) => {
