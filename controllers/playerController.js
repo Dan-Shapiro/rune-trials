@@ -25,7 +25,3 @@ exports.initializePlayer = async (req) => {
     throw error;
   }
 };
-
-exports.calculateDamage = (card, player, enemy) => {
-  return 5; // update with actual game logic
-};

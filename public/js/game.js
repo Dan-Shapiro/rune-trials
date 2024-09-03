@@ -181,9 +181,10 @@ function removeEnemy(enemyId) {
 
 function removeCardFromHand(cardId) {
   const cardElement = document.querySelector(`[data-card-id="${cardId}"]`);
+  const cardContainer = cardElement.parentElement;
   cardElement.classList.add('fade-out');
   setTimeout(() => {
-    cardElement.remove();
+    cardContainer.remove();
   }, 600);
 }
 

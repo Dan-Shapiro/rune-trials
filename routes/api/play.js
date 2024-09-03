@@ -3,6 +3,7 @@ const router = express.Router();
 const deckController = require('../../controllers/deckController');
 const playerController = require('../../controllers/playerController');
 const enemyController = require('../../controllers/enemyController');
+const combatUtils = require('../../utils/combat');
 
 router.post('/play-card', (req, res) => {
   try {
@@ -10,6 +11,8 @@ router.post('/play-card', (req, res) => {
     const player = req.session.player;
     const card = deckController.getCardById(req.session.cards, cardId);
     const enemy = enemyController.getEnemyById(req.session.enemies, enemyId);
+    const weapon = req.session.weapon;
+    const shield = req.session.shield;
 
     // validate card can be played
     if (req.session.cooldown > 0) {
@@ -30,7 +33,7 @@ router.post('/play-card', (req, res) => {
     // if an attack card
     if (card.type === 'attack') {
       // calculate damage
-      damage = playerController.calculateDamage(card, player, enemy);
+      damage = combatUtils.performAttack(player, enemy.enemy, weapon, shield, card.attackType, card.weaponStyle);
       enemy.hp -= damage;
 
       // if enemy is defeated, remove it
