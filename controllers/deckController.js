@@ -59,3 +59,15 @@ exports.drawCards = (cards, num) => {
 
   return cardsDrawn;
 };
+
+exports.getCardById = (cards, cardId) => {
+  return cards.hand.find(card => card.id == cardId);
+};
+
+exports.moveCardToDiscard = (cards, cardId) => {
+  const cardIndex = cards.hand.findIndex(card => card.id == cardId);
+  if (cardIndex > -1) {
+    const [card] = cards.hand.splice(cardIndex, 1);
+    cards.discard.push(card);
+  }
+};

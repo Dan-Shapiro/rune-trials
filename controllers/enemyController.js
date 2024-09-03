@@ -9,7 +9,7 @@ exports.initializeEnemies = async (req) => {
     if (!goblin) throw new Error('Goblin not found');
     enemies.push({
       enemy: goblin,
-      currHp: goblin.hp,
+      hp: goblin.hp,
       maxHit: calcMaxHit(goblin, null, null, 'crush'),
       cooldown: goblin.speed,
       damageDealt: null
@@ -19,7 +19,7 @@ exports.initializeEnemies = async (req) => {
     if (!hillGiant) throw new Error('Hill Giant not found');
     enemies.push({
       enemy: hillGiant,
-      currHp: hillGiant.hp,
+      hp: hillGiant.hp,
       maxHit: calcMaxHit(hillGiant, null, null, 'crush'),
       cooldown: hillGiant.speed,
       damageDealt: null
@@ -31,6 +31,17 @@ exports.initializeEnemies = async (req) => {
     throw error;
   }
 }
+
+exports.getEnemyById = (enemies, enemyId) => {
+  return enemies.find(enemy => enemy.enemy.id == enemyId);
+};
+
+exports.removeEnemy = (enemies, enemyId) => {
+  const enemyIndex = enemies.findIndex(enemy => enemy.enemy.id == enemyId);
+  if (enemyIndex > -1) {
+    enemies.splice(enemyIndex, 1);
+  }
+};
 
 exports.takeTurn = (req, res) => {
   res.json({

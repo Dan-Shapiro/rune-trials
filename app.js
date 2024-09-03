@@ -15,6 +15,7 @@ const enemyController = require('./controllers/enemyController');
 const deckController = require('./controllers/deckController');
 
 const apiRoutes = require('./routes/api');
+const playRoutes = require('./routes/api/play');
 
 // initialize app
 const app = express();
@@ -40,6 +41,7 @@ app.locals.capitalize = function(str) {
 
 // API routes
 app.use('/api', apiRoutes);
+app.use('/api', playRoutes);
 
 // routes
 app.get('/', (req, res) => {

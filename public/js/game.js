@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // start the first turn when screen loads
+  // start the first turn when screen loads 
   startTurn();
 
   //document.querySelector('.end-turn-button').addEventListener('click', endTurn);
@@ -73,7 +73,7 @@ function deselectCard() {
 
 function selectEnemy(enemyId) {
   if (selectedCard !== null) {
-    //playCard(selectedCard, enemyId);
+    playCard(selectedCard, enemyId);
     deselectCard();
   }
 }
@@ -109,18 +109,16 @@ function drawCards(cards) {
     cardElement.classList.add('card');
     cardElement.setAttribute('data-card-id', card.id);
     cardElement.innerHTML = `
-      <div class="card" data-card-id="${card.id}">
-        <div class="card-cost">${cardCost}</div>
-        <div class="card-name">${card.name}</div>
-        <div class="card-image">
-          <img src="${card.image}" alt="${card.name}">
-        </div>
-        <div class="card-type">
-          ${capitalize(card.type)}
-          ${card.type === 'attack' ? `<div>${capitalize(card.weaponStyle)} ${capitalize(card.attackType)}</div>` : ''}
-        </div>
-        <div class="card-text">${card.text}</div>
+      <div class="card-cost">${cardCost}</div>
+      <div class="card-name">${card.name}</div>
+      <div class="card-image">
+        <img src="${card.image}" alt="${card.name}">
       </div>
+      <div class="card-type">
+        ${capitalize(card.type)}
+        ${card.type === 'attack' ? `<div>${capitalize(card.weaponStyle)} ${capitalize(card.attackType)}</div>` : ''}
+      </div>
+      <div class="card-text">${card.text}</div>
     `;
 
     cardContainer.appendChild(cardElement);
@@ -155,6 +153,40 @@ function updateDiscardCount(count) {
   discardCountElement.textContent = count;
 }
 
+function showEnemyHitsplat(enemyId, damage) {
+  const enemyElement = document.querySelector(`[data-enemy-id="${enemyId}"]`);
+
+  const hitsplatContainer = enemyElement.querySelector('.enemy-hitsplat-container');
+  const hitsplatElement = document.createElement('div');
+  hitsplatElement.classList.add('enemy-hitsplat');
+  hitsplatElement.textContent = damage;
+  hitsplatContainer.appendChild(hitsplatElement);
+
+  setTimeout(() => {
+    hitsplatElement.remove();
+  }, 1200);
+}
+
+function removeEnemy(enemyId) {
+  const enemyElement = document.querySelector(`[data-enemy-id="${enemyId}"]`);
+
+  setTimeout(() => {
+    enemyElement.classList.add('fade-out');
+    setTimeout(() => {
+      enemyElement.remove();
+      checkIfAllEnemiesDefeated();
+    }, 600);
+  }, 1200);
+}
+
+function removeCardFromHand(cardId) {
+  const cardElement = document.querySelector(`[data-card-id="${cardId}"]`);
+  cardElement.classList.add('fade-out');
+  setTimeout(() => {
+    cardElement.remove();
+  }, 600);
+}
+
 function startTurn() {
   // draw 5 cards
   fetch('/api/deck/draw', {
@@ -173,4 +205,46 @@ function startTurn() {
   .catch(error => {
     console.error('Error starting turn:', error);
   });
+}
+
+function playCard(cardId, enemyId) {
+  fetch('/api/play-card', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ cardId: cardId, enemyId, enemyId })
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      // update player cooldown
+      document.getElementById('player-cooldown').textContent = data.newCooldown;
+
+      // update enemy hp
+      const enemyElement = document.querySelector(`[data-enemy-id="${enemyId}"]`);
+      const hpElement = enemyElement.querySelector('.enemy-hp');
+      hpElement.textContent = `${data.newEnemyHp}/${data.enemyMaxHp}`;
+
+      const hpFillElement = enemyElement.querySelector('.hp-bar-fill');
+      hpFillElement.style.width = `calc(${data.newEnemyHp}/${data.enemyMaxHp}*100%)`;
+
+      // show hitsplat for 2 ticks
+      showEnemyHitsplat(enemyId, data.damage);
+      
+      // remove enemy if defeated
+      if (data.isEnemyDefeated) {
+        removeEnemy(enemyId);
+      }
+
+      // move card to discard
+      removeCardFromHand(cardId);
+      updateDiscardCount(data.discardCount);
+    } else {
+      alert(data.message);
+    }
+  })
+  .catch(error => {
+    console.error('Error playing card:', error);
+  })
 }

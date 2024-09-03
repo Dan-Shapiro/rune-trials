@@ -120,8 +120,8 @@
           </div>
 
           <div class="enemy-hp-bar">
-            <div class="hp-bar-fill" style="width: calc(<%= enemyObj.currHp %> / <%= enemyObj.enemy.hp %> * 100%);"></div>
-            <span class="enemy-hp"><%= enemyObj.currHp %>/<%= enemyObj.enemy.hp %></span>
+            <div class="hp-bar-fill" style="width: calc(<%= enemyObj.hp %> / <%= enemyObj.enemy.hp %> * 100%);"></div>
+            <span class="enemy-hp"><%= enemyObj.hp %>/<%= enemyObj.enemy.hp %></span>
           </div>
 
           <div class="enemy-stat-row">
@@ -152,7 +152,7 @@
 <div class="hand-area">
   <div class="deck-section">
     <div class="cooldown-info">
-      <span class="cooldown"><%= cooldown %></span>
+      <span id="player-cooldown"><%= cooldown %></span>
     </div>
     <div class="deck-info">
       <img src="/icons/main/melee-deck.png" alt="Deck">

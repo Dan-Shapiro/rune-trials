@@ -61,6 +61,11 @@ h1 {
   text-shadow: 2px 2px #000;
 }
 
+.fade-out {
+  opacity: 0;
+  transition: opacity 0.6s ease-out;
+}
+
 .container {
   text-align: center;
   background-color: #333;
@@ -437,7 +442,7 @@ h1 {
   justify-content: center;
 }
 
-.cooldown {
+#player-cooldown {
   font-family: 'RS-Bold-12', sans-serif;
   font-weight: bold;
   text-align: center;
