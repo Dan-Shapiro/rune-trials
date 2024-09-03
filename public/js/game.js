@@ -49,6 +49,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  // start the first turn when screen loads
+  startTurn();
+
   //document.querySelector('.end-turn-button').addEventListener('click', endTurn);
 });
 
@@ -152,4 +155,22 @@ function updateDiscardCount(count) {
   discardCountElement.textContent = count;
 }
 
-// game functions
+function startTurn() {
+  // draw 5 cards
+  fetch('/api/deck/draw', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ num: 5 })
+  })
+  .then(response => response.json())
+  .then(data => {
+    drawCards(data.cardsDrawn);
+    updateDeckCount(data.deckCount);
+    updateDiscardCount(data.discardCount);
+  })
+  .catch(error => {
+    console.error('Error starting turn:', error);
+  });
+}

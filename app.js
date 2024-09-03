@@ -57,9 +57,6 @@ app.get('/game', async (req, res) => {
     // shuffle deck
     deckController.shuffle(req.session.cards.deck);
 
-    // draw 5 cards
-    deckController.drawCards(req.session.cards, 5);
-
     // initialize enemies
     await enemyController.initializeEnemies(req);
 
