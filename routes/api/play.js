@@ -32,7 +32,7 @@ router.post('/play-card', (req, res) => {
     // if an attack card
     if (card.type === 'attack') {
       // calculate damage
-      damage = combatUtils.performAttack(player, enemy.enemy, weapon, shield, card.attackType, card.weaponStyle);
+      damage = combatUtils.performAttack(player, enemy.enemy, weapon, shield, card.attackType, card.weaponStyle, 'onEnemy');
       enemy.hp -= damage;
 
       // if enemy is defeated, remove it

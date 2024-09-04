@@ -131,13 +131,21 @@ function calcDamage(maxHit) {
   return Math.floor(Math.random() * maxHit) + 1;
 }
 
-function performAttack(player, enemy, weapon, shield, style='stab', stance='accurate') {
-  const atkRoll = calcAtkRoll(player, weapon, shield, style, stance);
-  const defRoll = calcDefRoll(enemy, null, null, 'crush', 'controlled');
+function performAttack(attacker, target, weapon, shield, style='stab', stance='accurate', direction) {
+  let atkRoll = 0;
+  let defRoll = 0;
+  if (direction === 'onEnemy') {
+    atkRoll = calcAtkRoll(attacker, weapon, shield, style, stance);
+    defRoll = calcDefRoll(target, null, null, style, stance);
+  } else {
+    atkRoll = calcAtkRoll(attacker, null, null, style, stance);
+    defRoll = calcDefRoll(target, weapon, shield, style, stance);
+  }
+
   const hitChance = calcHitChance(atkRoll, defRoll);
 
   if (Math.random() <= hitChance) {
-    const maxHit = calcMaxHit(player, weapon, shield, stance);
+    const maxHit = calcMaxHit(attacker, weapon, shield, stance);
     const damage = calcDamage(maxHit);
     return damage;
   } else {

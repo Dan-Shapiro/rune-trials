@@ -12,7 +12,9 @@ exports.initializeEnemies = async (req) => {
       hp: goblin.hp,
       maxHit: calcMaxHit(goblin, null, null, 'crush'),
       cooldown: goblin.speed,
-      damageDealt: null
+      damageDealt: null,
+      playerCurrHp: null,
+      isAttacking: false
     });
 
     const hillGiant = await Enemy.findOne({ where: { name: 'Hill Giant' } });
@@ -22,7 +24,9 @@ exports.initializeEnemies = async (req) => {
       hp: hillGiant.hp,
       maxHit: calcMaxHit(hillGiant, null, null, 'crush'),
       cooldown: hillGiant.speed,
-      damageDealt: null
+      damageDealt: null,
+      playerCurrHp: null,
+      isAttacking: false
     });
 
     req.session.enemies = enemies;
